@@ -1,0 +1,11 @@
+/testenv
+/.vscode
+*.mp4
+*.jpg
+*.jpeg
+*.png
+*.mpg
+*.mpeg
+*.avi
+/study
+.env
