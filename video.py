@@ -7,8 +7,9 @@ from image import Image
 class Video:
     def __init__(self, path):
         self.video = self.open(path)
-        self.next_frame = self.__getNextFrame()
-        self.current_frame = self.next_frame.copy().astype('float')
+        self.current_color = self.__getNextFrame()
+        self.current_gray = self.__cvt2Gray(self.current_color)
+        self.before_gray = self.current_gray.copy().astype('float')
 
     def open(self, path):
         return cv2.VideoCapture(path)
@@ -17,22 +18,22 @@ class Video:
         self.video.release()
 
     def __getNextFrame(self):
-        hasNext, next_frame = self.video.read()
+        hasNext, frame = self.video.read()
+        return frame
 
-        if not hasNext:
-            return next_frame
-
-        return cv2.cvtColor(next_frame, cv2.COLOR_BGR2GRAY)
+    def __cvt2Gray(self, frame):
+        return cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     def moveToNextFrame(self):
-        self.next_frame = self.__getNextFrame()
+        self.current_color = self.__getNextFrame()
+        self.current_gray = self.__cvt2Gray(self.current_color)
 
 if __name__ == "__main__":
     video = Video(Const.VIDEO_PATH)
     image = Image()
-    image.show('current', video.current_frame)
-    image.show('next', video.next_frame)
+    image.show('current', video.before_gray)
+    image.show('next', video.current_color)
     video.moveToNextFrame()
-    image.show('current', video.current_frame)
-    image.show('next', video.next_frame)
+    image.show('current', video.before_gray)
+    image.show('next', video.current_color)
      

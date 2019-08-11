@@ -11,7 +11,7 @@ class Const:
 
     DELAY = 40 # ms
     MIN_AREA = 500 # height * width (px)
-    COLOR = (0, 255, 0) # rectangle color
+    RECT_COLOR = (0, 255, 0)
 
 if __name__ == "__main__":
     const = Const()
