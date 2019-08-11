@@ -2,12 +2,12 @@
 
 import cv2
 from const import Const
-import numpy as np
-import matplotlib.pyplot as plt
+from image import Image
 
 class Video:
     def __init__(self):
         self.video = self.open(Const.VIDEO_PATH)
+        self.imageInstance = Image()
         self.current_frame = self.__getNextFrame()
         self.next_frame = self.current_frame.copy().astype('float')
 
@@ -17,34 +17,19 @@ class Video:
     def close(self):
         self.video.release()
 
-    def __cvt2Gray(self, frame):
-        return cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
     def __getNextFrame(self):
         ret, frame = self.video.read()
-        return self.__cvt2Gray(frame)
+        return self.imageInstance.cvt2Gray(frame)
 
     def toNext(self):
         self.current_frame = self.next_frame
         self.next_frame = self.__getNextFrame()
 
-    def showFrame(self, title):
-        if title is 'current':
-            frame = self.current_frame
-        elif title is 'next':
-            frame = self.next_frame
-        else:
-            return
-
-        plt.title(title)
-        plt.imshow(frame, cmap='gray')
-        plt.show()
-
 if __name__ == "__main__":
     video = Video()
-    video.showFrame('current')
-    video.showFrame('next')
+    video.imageInstance.show('current', video.current_frame)
+    video.imageInstance.show('next', video.next_frame)
     video.toNext()
-    video.showFrame('current')
-    video.showFrame('next')
+    video.imageInstance.show('current', video.current_frame)
+    video.imageInstance.show('next', video.next_frame)
      
