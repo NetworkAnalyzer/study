@@ -129,6 +129,9 @@ dmypy.json
 /.vscode
 
 # input files
+/video
+/image
+/dataset
 *.mp4
 *.jpg
 *.jpeg
