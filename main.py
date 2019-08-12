@@ -1,9 +1,10 @@
 # -*- coding: UTF-8 -*-
 
 import cv2
+
 from video import Video
 from image import Image
-from const import Const
+import const
 
 if __name__ == "__main__":
     def subtract(before_gray, current_gray):
@@ -14,7 +15,6 @@ if __name__ == "__main__":
     def findContours(image):
         return cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    const = Const()
     video = Video(const.VIDEO_PATH)
 
     while(video.current_color is not None):

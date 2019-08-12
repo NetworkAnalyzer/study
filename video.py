@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import cv2
-from const import Const
+import const
 from image import Image
 
 class Video:
@@ -29,7 +29,7 @@ class Video:
         self.current_gray = self.__cvt2Gray(self.current_color)
 
 if __name__ == "__main__":
-    video = Video(Const.VIDEO_PATH)
+    video = Video(const.VIDEO_PATH)
     image = Image()
     image.show('current', video.before_gray)
     image.show('next', video.current_color)

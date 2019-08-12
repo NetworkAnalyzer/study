@@ -3,17 +3,24 @@
 from dotenv import load_dotenv
 import os
 
-class Const:
-    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    load_dotenv(os.path.join(BASE_DIR, '.env'))
+def basePath(path=None):
+    if path is None:
+        return BASE_DIR
+    
+    return os.path.join(BASE_DIR, path)
 
-    VIDEO_PATH = os.path.join(BASE_DIR, os.getenv('VIDEO_PATH'))
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(basePath('.env'))
 
-    DELAY = 40 # ms
-    MIN_AREA = 500 # height * width (px)
-    RECT_COLOR = (0, 255, 0)
+VIDEO_PATH = os.path.join(basePath(os.getenv('VIDEO_PATH')))
+DATASET_PATH = os.path.join(basePath(os.getenv('DATASET_PATH')))
+
+DELAY = 40 # ms
+MIN_AREA = 500 # height * width (px)
+RECT_COLOR = (0, 255, 0)
 
 if __name__ == "__main__":
-    const = Const()
-    print(const.BASE_DIR)
-    print(const.VIDEO_PATH)
+    print(basePath())
+    print(BASE_DIR)
+    print(VIDEO_PATH)
+    print(DATASET_PATH)
