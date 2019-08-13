@@ -22,6 +22,9 @@ class Video:
         return frame
 
     def __cvt2Gray(self, frame):
+        if frame is None:
+            return frame
+
         return cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     def moveToNextFrame(self):
