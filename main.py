@@ -4,6 +4,7 @@ import cv2
 
 from video import Video
 from image import Image
+from object import Object
 import const
 
 if __name__ == "__main__":
@@ -24,6 +25,10 @@ if __name__ == "__main__":
         for contour in contours:
             if cv2.contourArea(contour) > const.MIN_AREA:
                 x, y, w, h = cv2.boundingRect(contour)
+
+                object = Object(x, y, w, h)
+                print(object.compactness)
+                print(object.hwr)
 
                 top_left = (x, y)
                 bottom_right = (x + w, y + h)
