@@ -44,3 +44,4 @@ if __name__ == "__main__":
         video.moveToNextFrame()
 
     video.close()
+    cv2.destroyAllWindows()
