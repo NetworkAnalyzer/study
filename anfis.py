@@ -5,15 +5,20 @@ import anfis.anfis as anfis
 import anfis.membership.membershipfunction as mf
 import const
 
-if __name__ == "__main__":
-    def loadDataset(path):
+class Anfis:
+    def __init__(self, path):
+        self.train_data, self.test_data = self.loadDataset(path)
+        self.mfc = mf.MemFuncs(self.generateMf())
+        self.anfis = anfis.ANFIS(self.train_data, self.test_data, self.mfc)
+
+    def loadDataset(self, path):
         dataset = np.loadtxt(path, usecols=[1,2,3,4])
         train_data = dataset[:,0:3]
         test_data = dataset[:,3]
 
         return train_data, test_data
-
-    def defineMF():
+    
+    def generateMf(self):
         mf = [
             [
                 # 'gaussmf'はメンバシップ関数名，meanは中心値，sigmaは幅
@@ -38,9 +43,24 @@ if __name__ == "__main__":
 
         return mf
 
-    train_data, test_data = loadDataset(const.DATASET_PATH)
-    mfc = mf.MemFuncs(defineMF())
-    anfis1 = anfis.ANFIS(train_data, test_data, mfc)
+    def train(self, epochs=20):
+        """
+        epochs >= 2
+        """
+        self.anfis.trainHybridJangOffLine(epochs=epochs)
 
-    anfis1.trainHybridJangOffLine(epochs=20)
-    anfis1.plotResults()
+    def plotResult(self):
+        self.anfis.plotResults()
+
+if __name__ == "__main__":
+    anfis1 = Anfis(const.DATASET_PATH)
+    anfis2 = Anfis(const.DATASET_PATH) 
+    anfis3 = Anfis(const.DATASET_PATH) 
+
+    anfis1.train(epochs=2)
+    anfis2.train(epochs=5)
+    anfis3.train(epochs=10)
+
+    anfis1.plotResult()
+    anfis2.plotResult()
+    anfis3.plotResult()
