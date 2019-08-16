@@ -14,7 +14,7 @@ class Object:
     def compactness(self):
         area = self.h * self.w
         prim = 2 * self.h + 2 * self.w
-        
+
         return float(area) / prim**2
 
     def hwr(self):

@@ -39,4 +39,4 @@ if __name__ == "__main__":
     video.moveToNextFrame()
     image.show('current', video.before_gray)
     image.show('next', video.current_color)
-     
+

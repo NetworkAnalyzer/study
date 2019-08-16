@@ -17,7 +17,7 @@ class Anfis:
         test_data = dataset[:,3]
 
         return train_data, test_data
-    
+
     def generateMf(self):
         mf = [
             [
@@ -54,8 +54,8 @@ class Anfis:
 
 if __name__ == "__main__":
     anfis1 = Anfis(const.DATASET_PATH)
-    anfis2 = Anfis(const.DATASET_PATH) 
-    anfis3 = Anfis(const.DATASET_PATH) 
+    anfis2 = Anfis(const.DATASET_PATH)
+    anfis3 = Anfis(const.DATASET_PATH)
 
     anfis1.train(epochs=2)
     anfis2.train(epochs=5)
