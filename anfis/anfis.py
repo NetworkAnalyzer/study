@@ -144,17 +144,46 @@ class ANFIS:
             plt.xlabel('epoch')
             plt.show()
 
-    def plotMF(self, x, inputVar):
+    def plotMF(self, x, inputNumber):
+        """plotMF(self, x, inputNumber)
+
+        Parameters
+        ----------
+        x : 1d array or iterable
+            表示したいmfの横軸の値
+        inputNumber : int
+            入力するデータの種類を配列の添字で示したもの
+
+        """
+        
         import matplotlib.pyplot as plt
         from skfuzzy import gaussmf, gbellmf, sigmf
 
-        for mf in range(len(self.memFuncs[inputVar])):
-            if self.memFuncs[inputVar][mf][0] == 'gaussmf':
-                y = gaussmf(x,**self.memClass.MFList[inputVar][mf][1])
-            elif self.memFuncs[inputVar][mf][0] == 'gbellmf':
-                y = gbellmf(x,**self.memClass.MFList[inputVar][mf][1])
-            elif self.memFuncs[inputVar][mf][0] == 'sigmf':
-                y = sigmf(x,**self.memClass.MFList[inputVar][mf][1])
+        """gaussmf()
+
+        Parameters
+        ----------
+        x : 1d array or iterable
+            横軸の値
+        mean : float
+            中央値
+        sigma : float
+            標準偏差
+
+        Returns
+        -------
+        y : 1d array
+            関数の出力
+
+        """
+
+        for mf in range(len(self.memFuncs[inputNumber])):
+            if self.memFuncs[inputNumber][mf][0] == 'gaussmf':
+                y = gaussmf(x,**self.memClass.MFList[inputNumber][mf][1])
+            elif self.memFuncs[inputNumber][mf][0] == 'gbellmf':
+                y = gbellmf(x,**self.memClass.MFList[inputNumber][mf][1])
+            elif self.memFuncs[inputNumber][mf][0] == 'sigmf':
+                y = sigmf(x,**self.memClass.MFList[inputNumber][mf][1])
 
             plt.plot(x,y,'r')
 

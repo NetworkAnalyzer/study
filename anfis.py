@@ -49,6 +49,10 @@ class Anfis:
         """
         self.anfis.trainHybridJangOffLine(epochs=epochs)
 
+    def plotMF(self, x, inputNumber):
+        from skfuzzy import control as ctrl
+        self.anfis.plotMF(ctrl.Antecedent(x, 'T').universe, inputNumber)
+
     def plotResult(self):
         self.anfis.plotResults()
 
@@ -56,6 +60,8 @@ if __name__ == "__main__":
     anfis1 = Anfis(const.DATASET_PATH)
     anfis2 = Anfis(const.DATASET_PATH)
     anfis3 = Anfis(const.DATASET_PATH)
+
+    anfis1.plotMF(range(-30, 30), 1)
 
     anfis1.train(epochs=2)
     anfis2.train(epochs=5)
