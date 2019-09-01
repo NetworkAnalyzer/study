@@ -10,6 +10,7 @@ class Object:
         self.c_y = 0
         self.compactness = self.compactness()
         self.hwr = self.hwr()
+        self.image = ""
 
     def compactness(self):
         area = self.h * self.w
