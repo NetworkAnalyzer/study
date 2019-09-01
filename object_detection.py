@@ -26,9 +26,8 @@ if __name__ == "__main__":
                 top_left = (x, y)
                 bottom_right = (x + w, y + h)
 
-                object.image = video.current_gray[x:x+w, y:y+h]
+                object.image = video.current_gray[y:y+h, x:x+w]
                 print(object.image)
-                cv2.imwrite('')
                 image.show('trimming', object.image, gray=True)
 
                 cv2.rectangle(video.current_color, top_left, bottom_right, const.RECT_COLOR, 2)
