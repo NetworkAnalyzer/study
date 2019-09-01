@@ -8,20 +8,12 @@ from object import Object
 import const
 
 if __name__ == "__main__":
-    def subtract(before_gray, current_gray):
-        cv2.accumulateWeighted(current_gray, before_gray, 0.5)
-        mdframe = cv2.absdiff(current_gray, cv2.convertScaleAbs(before_gray))
-        return cv2.threshold(mdframe, 3, 255, cv2.THRESH_BINARY)[1]
-
-    def findContours(image):
-        return cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
     video = Video(const.VIDEO_PATH)
     image = Image()
 
     while(video.current_color is not None):
-        threshold = subtract(video.before_gray, video.current_gray)
-        contours, heirarchy = findContours(threshold)
+        threshold = image.subtract(video.before_gray, video.current_gray)
+        contours, heirarchy = image.findContours(threshold)
 
         for contour in contours:
             if const.MIN_AREA < cv2.contourArea(contour) < const.MAX_AREA:

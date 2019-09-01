@@ -21,7 +21,12 @@ class Image:
 
         return cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    def subtract(self):
+    def subtract(self, before=None, current=None):
+        if before is not None:
+            self.before_gray = before
+        if current is not None:
+            self.current_gray = current
+
         cv2.accumulateWeighted(self.current_gray, self.before_gray, 0.5)
         mdframe = cv2.absdiff(self.current_gray, cv2.convertScaleAbs(self.before_gray))
         return cv2.threshold(mdframe, 3, 255, cv2.THRESH_BINARY)[1]
