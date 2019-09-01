@@ -17,6 +17,7 @@ DATASET_PATH = os.path.join(basePath(os.getenv('DATASET_PATH')))
 
 DELAY = 40 # ms
 MIN_AREA = 500 # height * width (px)
+MAX_AREA = 2200
 RECT_COLOR = (0, 255, 0)
 
 if __name__ == "__main__":

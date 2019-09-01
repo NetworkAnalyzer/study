@@ -24,7 +24,7 @@ if __name__ == "__main__":
         contours, heirarchy = findContours(threshold)
 
         for contour in contours:
-            if cv2.contourArea(contour) > const.MIN_AREA:
+            if const.MIN_AREA < cv2.contourArea(contour) < const.MAX_AREA:
                 x, y, w, h = cv2.boundingRect(contour)
 
                 object = Object(x, y, w, h)
