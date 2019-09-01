@@ -12,33 +12,31 @@ class Anfis:
         self.anfis = anfis.ANFIS(self.train_data, self.test_data, self.mfc)
 
     def loadDataset(self, path):
-        dataset = np.loadtxt(path, usecols=[1,2,3,4])
-        train_data = dataset[:,0:3]
-        test_data = dataset[:,3]
+        dataset = np.loadtxt(path, usecols=[1,2,3])
+        train_data = dataset[:,0:2]
+        test_data = dataset[:,2]
 
         return train_data, test_data
 
     def generateMf(self):
         mf = [
+            # ここで大きな配列が3つあるのは，入力が3つだから．入力が増えれば配列も増える
+            # 入力の順番と配列の順番は対応していて，入力に近い値がmeanに入っている
+            # たとえば，1番目の入力は1以下だから1以下の数値が，3番目の入力は100以下だから100以下の数値が入っている
             [
                 # 'gaussmf'はメンバシップ関数名，meanは中心値，sigmaは幅
+                # 問題は，なぜ1つの入力に4つのmfが定義されているのか
                 ['gaussmf',{'mean':0.4,'sigma':1.}],
-                ['gaussmf',{'mean':1.,'sigma':2.}],
-                ['gaussmf',{'mean':0.8,'sigma':10.}],
-                ['gaussmf',{'mean':0.6,'sigma':7.}]
+                ['gaussmf',{'mean':1.5,'sigma':2.}],
+                ['gaussmf',{'mean':0.5,'sigma':10.}],
+                ['gaussmf',{'mean':1.3,'sigma':7.}]
             ],
             [
                 ['gaussmf',{'mean':1.,'sigma':2.}],
-                ['gaussmf',{'mean':0.9,'sigma':3.}],
+                ['gaussmf',{'mean':1,'sigma':3.}],
                 ['gaussmf',{'mean':1.,'sigma':10.}],
-                ['gaussmf',{'mean':1.5,'sigma':5.}]
+                ['gaussmf',{'mean':1.,'sigma':5.}]
             ],
-            [
-                ['gaussmf',{'mean':50.,'sigma':2.}],
-                ['gaussmf',{'mean':60.,'sigma':3.}],
-                ['gaussmf',{'mean':70.,'sigma':10.}],
-                ['gaussmf',{'mean':80,'sigma':5.}]
-            ]
         ]
 
         return mf
