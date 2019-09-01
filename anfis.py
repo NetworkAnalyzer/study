@@ -56,6 +56,9 @@ class Anfis:
     def plotResult(self):
         self.anfis.plotResults()
 
+    def plotErrors(self):
+        self.anfis.plotErrors()
+
 if __name__ == "__main__":
     anfis1 = Anfis(const.DATASET_PATH)
     anfis2 = Anfis(const.DATASET_PATH)

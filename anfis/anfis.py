@@ -40,6 +40,7 @@ class ANFIS:
         self.consequents = np.empty(self.Y.ndim * len(self.rules) * (self.X.shape[1] + 1))
         self.consequents.fill(0)
         self.errors = np.empty(0)
+        self.min_error = 1
         self.memFuncsHomo = all(len(i)==len(self.memFuncsByVariable[0]) for i in self.memFuncsByVariable)
         self.trainingType = 'Not trained yet'
 
@@ -78,6 +79,8 @@ class ANFIS:
             error = np.sum((self.Y-layerFive.T)**2)
             print(str(epoch) + ' current error: ' + str(error))
             self.errors = np.append(self.errors,error)
+            if error < self.min_error:
+                self.min_error = error
 
             if len(self.errors) != 0:
                 if self.errors[len(self.errors)-1] < tolerance:
