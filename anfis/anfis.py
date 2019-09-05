@@ -203,6 +203,17 @@ class ANFIS:
             plt.legend(loc='upper left')
             plt.show()
 
+    def getAccuracyRate(self):
+        predicted_data = self.fittedValues > 0.5
+        correct_data = self.Y > 0.5
+
+        cnt = 0
+        for x, y in zip(predicted_data, correct_data):
+            if x[0] == y:
+                cnt+=1
+        
+        return float(cnt) / len(correct_data)
+
 def plusOne(n):
     return n + 1
 
