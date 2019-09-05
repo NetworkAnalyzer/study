@@ -12,8 +12,9 @@ def basePath(path=None):
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(basePath('.env'))
 
-VIDEO_PATH = os.path.join(basePath(os.getenv('VIDEO_PATH')))
-DATASET_PATH = os.path.join(basePath(os.getenv('DATASET_PATH')))
+VIDEO_PATH = basePath(os.getenv('VIDEO_PATH'))
+DATASET_PATH = basePath(os.getenv('DATASET_PATH'))
+DATASET_PATH = basePath(os.getenv('DATASET_PATH'))
 
 DELAY = 40 # ms
 MIN_AREA = 500 # height * width (px)
