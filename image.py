@@ -5,6 +5,12 @@ from object import Object
 import matplotlib.pyplot as plt
 
 class Image:
+    def __init__(self, path):
+        self.path = path
+        self.image = cv2.imread(path)
+        self.height = self.image.shape[0]
+        self.width = self.image.shape[1]
+
     def show(self, name, image, gray=False):
         plt.title(name)
         plt.imshow(image)
@@ -13,7 +19,6 @@ class Image:
             plt.gray()
             
         plt.show()
-    
 
     def __cvt2Gray(self, frame):
         if frame is None:
