@@ -40,7 +40,7 @@ class ANFIS:
         self.consequents = np.empty(self.Y.ndim * len(self.rules) * (self.X.shape[1] + 1))
         self.consequents.fill(0)
         self.errors = np.empty(0)
-        self.min_error = 1
+        self.min_error = 100
         self.memFuncsHomo = all(len(i)==len(self.memFuncsByVariable[0]) for i in self.memFuncsByVariable)
         self.trainingType = 'Not trained yet'
 

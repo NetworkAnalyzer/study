@@ -60,6 +60,9 @@ class Anfis:
     def getAccuracyRate(self):
         return self.anfis.getAccuracyRate()
 
+    def getMinError(self):
+        return self.anfis.min_error
+
 if __name__ == "__main__":
     anfis1 = Anfis(const.DATASET_PATH)
     anfis2 = Anfis(const.DATASET_PATH)
