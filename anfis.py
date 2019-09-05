@@ -70,5 +70,15 @@ if __name__ == "__main__":
     carAnfis.train(epochs=10)
     trackAnfis.train(epochs=10)
 
+    print('car────────────────────────')
+    print('accuracy:{0}'.format(carAnfis.anfis.accuracy))
+    print('precision:{0}'.format(carAnfis.anfis.precision))
+    print('recall:{0}'.format(carAnfis.anfis.recall))
+    
+    print('track────────────────────────')
+    print('accuracy:{0}'.format(trackAnfis.anfis.accuracy))
+    print('precision:{0}'.format(trackAnfis.anfis.precision))
+    print('recall:{0}'.format(trackAnfis.anfis.recall))
+    
     carAnfis.plotResult()
     trackAnfis.plotResult()

@@ -44,6 +44,24 @@ class ANFIS:
         self.memFuncsHomo = all(len(i)==len(self.memFuncsByVariable[0]) for i in self.memFuncsByVariable)
         self.trainingType = 'Not trained yet'
 
+        """
+        True Positive: 正解であるはずのデータを正解であると判定した
+        False Negative: 不正解であるはずのデータを不正解であると判定した
+        True Negative: 正解であるはずのデータを不正解であると判定した
+        False Positive: 不正解であるはずのデータを正解であると判定した
+        Accuracy: 正解・不正解にかかわらず，正しい判定をした割合 ((TP + FN) / (TP + FN + TN + FP))
+        Presicion: 正解と判定したものにおいて，正しい判定をした割合 (TP / (TP + FP))
+        Recall: 正解と判定されるべきものにおいて，正しい判定をした割合 (TP / (TP + TN))
+        """
+        self.TP = 0
+        self.FN = 0
+        self.TN = 0
+        self.FP = 0
+        self.accuracy = 0
+        self.precision = 0
+        self.recall = 0
+        self.f_measure = 0
+
     # Least Square Estimation 最小2乗推定値
     def LSE(self, A, B, initialGamma = 1000.):
         coeffMat = A
@@ -134,6 +152,8 @@ class ANFIS:
         self.fittedValues = predict(self,self.X)
         self.residuals = self.Y - self.fittedValues[:,0]
 
+        self.aggregate()
+
         return self.fittedValues
 
 
@@ -203,16 +223,29 @@ class ANFIS:
             plt.legend(loc='upper left')
             plt.show()
 
-    def getAccuracyRate(self):
-        predicted_data = self.fittedValues > 0.5
+    def aggregate(self):
+        self.TP = self.FN = self.TN = self.FP = 0
+        self.accuracy = self.precision = self.recall = 0
+
+        predicted_data = [x[0] > 0.5 for x in self.fittedValues]
         correct_data = self.Y > 0.5
 
-        cnt = 0
         for x, y in zip(predicted_data, correct_data):
-            if x[0] == y:
-                cnt+=1
-        
-        return float(cnt) / len(correct_data)
+            if y == 1:
+                if x == 1:
+                    self.TP+=1
+                elif x == 0:
+                    self.TN+=1
+            elif y == 0:
+                if x == 1:
+                    self.FP+=1
+                elif x == 0:
+                    self.FN+=1
+
+        self.accuracy = float(self.TP + self.FN) / (self.TP + self.FN + self.TN + self.FP)
+        self.precision = float(self.TP) / (self.TP + self.FP) if self.TP + self.FP != 0 else None 
+        self.recall = float(self.TP) / (self.TP + self.TN) if self.TP + self.TN != 0 else None
+        self.f_measure = 2 * self.precision * self.recall / (self.precision + self.recall)
 
 def plusOne(n):
     return n + 1
