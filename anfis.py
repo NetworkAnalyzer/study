@@ -64,16 +64,11 @@ class Anfis:
         return self.anfis.min_error
 
 if __name__ == "__main__":
-    anfis1 = Anfis(const.DATASET_PATH)
-    anfis2 = Anfis(const.DATASET_PATH)
-    anfis3 = Anfis(const.DATASET_PATH)
+    carAnfis = Anfis(const.DATASET_PATH_FOR_CAR)
+    trackAnfis = Anfis(const.DATASET_PATH_FOR_TRACK)
 
-    anfis1.plotMF(range(-30, 30), 1)
+    carAnfis.train(epochs=10)
+    trackAnfis.train(epochs=10)
 
-    anfis1.train(epochs=2)
-    anfis2.train(epochs=5)
-    anfis3.train(epochs=10)
-
-    anfis1.plotResult()
-    anfis2.plotResult()
-    anfis3.plotResult()
+    carAnfis.plotResult()
+    trackAnfis.plotResult()

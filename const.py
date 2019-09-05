@@ -13,8 +13,8 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(basePath('.env'))
 
 VIDEO_PATH = basePath(os.getenv('VIDEO_PATH'))
-DATASET_PATH = basePath(os.getenv('DATASET_PATH'))
-DATASET_PATH = basePath(os.getenv('DATASET_PATH'))
+DATASET_PATH_FOR_CAR = basePath(os.getenv('DATASET_PATH_FOR_CAR'))
+DATASET_PATH_FOR_TRACK = basePath(os.getenv('DATASET_PATH_FOR_TRACK'))
 
 DELAY = 40 # ms
 MIN_AREA = 500 # height * width (px)
@@ -25,4 +25,4 @@ if __name__ == "__main__":
     print(basePath())
     print(BASE_DIR)
     print(VIDEO_PATH)
-    print(DATASET_PATH)
+    print(DATASET_PATH_FOR_TRACK)
