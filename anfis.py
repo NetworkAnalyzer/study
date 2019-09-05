@@ -12,7 +12,7 @@ class Anfis:
         self.anfis = anfis.ANFIS(self.train_data, self.test_data, self.mfc)
 
     def loadDataset(self, path):
-        dataset = np.loadtxt(path, usecols=[1,2,3])
+        dataset = np.loadtxt(path, delimiter=',',usecols=[1,2,3])
         train_data = dataset[:,0:2]
         test_data = dataset[:,2]
 
@@ -26,16 +26,16 @@ class Anfis:
             [
                 # 'gaussmf'はメンバシップ関数名，meanは中心値，sigmaは幅
                 # 問題は，なぜ1つの入力に4つのmfが定義されているのか
-                ['gaussmf',{'mean':0.4,'sigma':1.}],
-                ['gaussmf',{'mean':1.5,'sigma':2.}],
+                ['gaussmf',{'mean':0.5,'sigma':1.}],
+                ['gaussmf',{'mean':0.5,'sigma':2.}],
                 ['gaussmf',{'mean':0.5,'sigma':10.}],
-                ['gaussmf',{'mean':1.3,'sigma':7.}]
+                ['gaussmf',{'mean':0.5,'sigma':7.}]
             ],
             [
-                ['gaussmf',{'mean':1.,'sigma':2.}],
-                ['gaussmf',{'mean':1,'sigma':3.}],
-                ['gaussmf',{'mean':1.,'sigma':10.}],
-                ['gaussmf',{'mean':1.,'sigma':5.}]
+                ['gaussmf',{'mean':2.8,'sigma':2.}],
+                ['gaussmf',{'mean':1.5,'sigma':3.}],
+                ['gaussmf',{'mean':1.5,'sigma':10.}],
+                ['gaussmf',{'mean':1.5,'sigma':5.}]
             ],
         ]
 
