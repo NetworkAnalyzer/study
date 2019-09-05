@@ -14,23 +14,23 @@ if __name__ == "__main__":
         return 1 if path.find('_{0}'.format(dataset_for)) is not -1 else 0
 
     paths = glob.glob("image/trimmed_*.png")
-    dataset_for = 'track'
 
-    cnt = 1
-    data = []
-    for path in paths:
-        image = Image(path)
-        object = Object(0, 0, image.height, image.width)
+    for dataset_for in ['car', 'track']:
+        cnt = 1
+        data = []
+        for path in paths:
+            image = Image(path)
+            object = Object(0, 0, image.height, image.width)
 
-        data.append([
-            cnt,
-            round(object.compactness, 4),
-            round(object.hwr, 4),
-            getAns(path, dataset_for)
-        ])
+            data.append([
+                cnt,
+                round(object.compactness, 4),
+                round(object.hwr, 4),
+                getAns(path, dataset_for)
+            ])
 
-        cnt+=1
+            cnt+=1
 
-    with open('dataset/dataset.csv', 'w') as f:
-        w = csv.writer(f, lineterminator='\n')
-        w.writerows(data)
+        with open('dataset/dataset_for_{0}.csv'.format(dataset_for), 'w') as f:
+            w = csv.writer(f, lineterminator='\n')
+            w.writerows(data)
