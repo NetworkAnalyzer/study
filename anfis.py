@@ -64,15 +64,15 @@ if __name__ == "__main__":
     carAnfis = Anfis(const.DATASET_PATH_FOR_CAR)
     trackAnfis = Anfis(const.DATASET_PATH_FOR_TRACK)
 
-    carAnfis.train(epochs=10)
-    trackAnfis.train(epochs=10)
+    carAnfis.train(epochs=40)
+    trackAnfis.train(epochs=40)
 
     print('car────────────────────────')
     print('accuracy:{0}'.format(carAnfis.anfis.accuracy))
     print('precision:{0}'.format(carAnfis.anfis.precision))
     print('recall:{0}'.format(carAnfis.anfis.recall))
     
-    print('track────────────────────────')
+    print('track──────────────────────')
     print('accuracy:{0}'.format(trackAnfis.anfis.accuracy))
     print('precision:{0}'.format(trackAnfis.anfis.precision))
     print('recall:{0}'.format(trackAnfis.anfis.recall))
