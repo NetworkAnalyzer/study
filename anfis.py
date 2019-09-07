@@ -57,9 +57,6 @@ class Anfis:
     def plotErrors(self):
         self.anfis.plotErrors()
     
-    def getAccuracyRate(self):
-        return self.anfis.getAccuracyRate()
-
     def getMinError(self):
         return self.anfis.min_error
 
