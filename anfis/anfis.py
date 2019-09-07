@@ -11,33 +11,15 @@ import copy
 import const
 
 class ANFIS:
-    """Class to implement an Adaptive Network Fuzzy Inference System: ANFIS"
-
-    Attributes:
-        X
-        Y
-        XLen
-        memClass
-        memFuncs
-        memFuncsByVariable
-        rules
-        consequents
-        errors
-        memFuncsHomo
-        trainingType
-
-
-    """
-
     def __init__(self, X, Y, mf):
-        self.X = np.array(copy.copy(X))
-        self.Y = np.array(copy.copy(Y))
-        self.XLen = len(self.X)
+        self.trainX = np.array(copy.copy(X))
+        self.trainY = np.array(copy.copy(Y))
+        self.XLen = len(self.trainX)
         self.memClass = copy.deepcopy(mf)
         self.memFuncs = self.memClass.MFList
         self.memFuncsByVariable = [[x for x in range(len(self.memFuncs[z]))] for z in range(len(self.memFuncs))]
         self.rules = np.array(list(itertools.product(*self.memFuncsByVariable)))
-        self.consequents = np.empty(self.Y.ndim * len(self.rules) * (self.X.shape[1] + 1))
+        self.consequents = np.empty(self.trainY.ndim * len(self.rules) * (self.trainX.shape[1] + 1))
         self.consequents.fill(0)
         self.errors = np.empty(0)
         self.min_error = 100
@@ -86,15 +68,15 @@ class ANFIS:
         while (epoch < epochs) and (convergence is not True):
 
             #layer four: forward pass
-            [layerFour, wSum, w] = forwardHalfPass(self, self.X)
+            [layerFour, wSum, w] = forwardHalfPass(self, self.trainX)
 
             #layer five: least squares estimate
-            layerFive = np.array(self.LSE(layerFour,self.Y,initialGamma))
+            layerFive = np.array(self.LSE(layerFour,self.trainY,initialGamma))
             self.consequents = layerFive
             layerFive = np.dot(layerFour,layerFive)
 
             #error
-            error = np.sum((self.Y-layerFive.T)**2)
+            error = np.sum((self.trainY-layerFive.T)**2)
             print(str(epoch) + ' current error: ' + str(error))
             self.errors = np.append(self.errors,error)
             if error < self.min_error:
@@ -106,8 +88,8 @@ class ANFIS:
 
             # back propagation
             if convergence is not True:
-                cols = list(range(len(self.X[0,:])))
-                dE_dAlpha = list(backprop(self, colX, cols, wSum, w, layerFive) for colX in range(self.X.shape[1]))
+                cols = list(range(len(self.trainX[0,:])))
+                dE_dAlpha = list(backprop(self, colX, cols, wSum, w, layerFive) for colX in range(self.trainX.shape[1]))
 
 
             if len(self.errors) >= 4:
@@ -149,8 +131,8 @@ class ANFIS:
             epoch = epoch + 1
 
 
-        self.fittedValues = predict(self,self.X)
-        self.residuals = self.Y - self.fittedValues[:,0]
+        self.fittedValues = predict(self,self.trainX)
+        self.residuals = self.trainY - self.fittedValues[:,0]
 
         self.aggregate()
 
@@ -218,7 +200,7 @@ class ANFIS:
         else:
             import matplotlib.pyplot as plt
             plt.plot(map(plusOne, list(range(len(self.fittedValues)))),self.fittedValues,'or', label='trained')
-            plt.plot(map(plusOne, list(range(len(self.Y)))),self.Y,'^b', label='original')
+            plt.plot(map(plusOne, list(range(len(self.trainY)))),self.trainY,'^b', label='original')
             plt.hlines([0.5], 0, len(self.fittedValues) + 1, "black", linestyles='dashed')
             plt.legend(loc='upper left')
             plt.show()
@@ -228,7 +210,7 @@ class ANFIS:
         self.accuracy = self.precision = self.recall = 0
 
         predicted_data = [x[0] > 0.5 for x in self.fittedValues]
-        correct_data = self.Y > 0.5
+        correct_data = self.trainY > 0.5
 
         for x, y in zip(predicted_data, correct_data):
             if y == 1:
@@ -313,25 +295,25 @@ def backprop(ANFISObj, columnX, columns, theWSum, theW, theLayerFive):
         timesThru = 0
         for alpha in sorted(ANFISObj.memFuncs[columnX][MF][1].keys()):
 
-            bucket3 = np.empty(len(ANFISObj.X))
-            for rowX in range(len(ANFISObj.X)):
-                varToTest = ANFISObj.X[rowX,columnX]
+            bucket3 = np.empty(len(ANFISObj.trainX))
+            for rowX in range(len(ANFISObj.trainX)):
+                varToTest = ANFISObj.trainX[rowX,columnX]
                 tmpRow = np.empty(len(ANFISObj.memFuncs))
                 tmpRow.fill(varToTest)
 
-                bucket2 = np.empty(ANFISObj.Y.ndim)
-                for colY in range(ANFISObj.Y.ndim):
+                bucket2 = np.empty(ANFISObj.trainY.ndim)
+                for colY in range(ANFISObj.trainY.ndim):
 
                     rulesWithAlpha = np.array(np.where(ANFISObj.rules[:,columnX]==MF))[0]
                     adjCols = np.delete(columns,columnX)
 
-                    senSit = mfDerivs.partial_dMF(ANFISObj.X[rowX,columnX],ANFISObj.memFuncs[columnX][MF],alpha)
+                    senSit = mfDerivs.partial_dMF(ANFISObj.trainX[rowX,columnX],ANFISObj.memFuncs[columnX][MF],alpha)
                     # produces d_ruleOutput/d_parameterWithinMF
                     dW_dAplha = senSit * np.array([np.prod([ANFISObj.memClass.evaluateMF(tmpRow)[c][ANFISObj.rules[r][c]] for c in adjCols]) for r in rulesWithAlpha])
 
                     bucket1 = np.empty(len(ANFISObj.rules[:,0]))
                     for consequent in range(len(ANFISObj.rules[:,0])):
-                        fConsequent = np.dot(np.append(ANFISObj.X[rowX,:],1.),ANFISObj.consequents[((ANFISObj.X.shape[1] + 1) * consequent):(((ANFISObj.X.shape[1] + 1) * consequent) + (ANFISObj.X.shape[1] + 1)),colY])
+                        fConsequent = np.dot(np.append(ANFISObj.trainX[rowX,:],1.),ANFISObj.consequents[((ANFISObj.trainX.shape[1] + 1) * consequent):(((ANFISObj.trainX.shape[1] + 1) * consequent) + (ANFISObj.trainX.shape[1] + 1)),colY])
                         acum = 0
                         if consequent in rulesWithAlpha:
                             acum = dW_dAplha[np.where(rulesWithAlpha==consequent)] * theWSum[rowX]
@@ -342,10 +324,10 @@ def backprop(ANFISObj, columnX, columns, theWSum, theW, theLayerFive):
 
                     sum1 = np.sum(bucket1)
 
-                    if ANFISObj.Y.ndim == 1:
-                        bucket2[colY] = sum1 * (ANFISObj.Y[rowX]-theLayerFive[rowX,colY])*(-2)
+                    if ANFISObj.trainY.ndim == 1:
+                        bucket2[colY] = sum1 * (ANFISObj.trainY[rowX]-theLayerFive[rowX,colY])*(-2)
                     else:
-                        bucket2[colY] = sum1 * (ANFISObj.Y[rowX,colY]-theLayerFive[rowX,colY])*(-2)
+                        bucket2[colY] = sum1 * (ANFISObj.trainY[rowX,colY]-theLayerFive[rowX,colY])*(-2)
 
                 sum2 = np.sum(bucket2)
                 bucket3[rowX] = sum2
