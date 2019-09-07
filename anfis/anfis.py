@@ -11,9 +11,12 @@ import copy
 import const
 
 class ANFIS:
-    def __init__(self, X, Y, mf):
-        self.trainX = np.array(copy.copy(X))
-        self.trainY = np.array(copy.copy(Y))
+    def __init__(self, trainX, trainY, testX, testY, mf):
+        self.trainX = np.array(copy.copy(trainX))
+        self.trainY = np.array(copy.copy(trainY))
+        self.testX = np.array(copy.copy(testX))
+        self.testY = np.array(copy.copy(testY))
+
         self.XLen = len(self.trainX)
         self.memClass = copy.deepcopy(mf)
         self.memFuncs = self.memClass.MFList
@@ -130,9 +133,8 @@ class ANFIS:
                         self.memFuncs[varsWithMemFuncs][MFs][1][paramList[param]] = self.memFuncs[varsWithMemFuncs][MFs][1][paramList[param]] + dAlpha[varsWithMemFuncs][MFs][param]
             epoch = epoch + 1
 
-
-        self.fittedValues = predict(self,self.trainX)
-        self.residuals = self.trainY - self.fittedValues[:,0]
+        self.fittedValues = predict(self, self.testX)
+        self.residuals = self.testY - self.fittedValues[:,0]
 
         self.aggregate()
 
@@ -200,7 +202,7 @@ class ANFIS:
         else:
             import matplotlib.pyplot as plt
             plt.plot(map(plusOne, list(range(len(self.fittedValues)))),self.fittedValues,'or', label='trained')
-            plt.plot(map(plusOne, list(range(len(self.trainY)))),self.trainY,'^b', label='original')
+            plt.plot(map(plusOne, list(range(len(self.testY)))),self.testY,'^b', label='original')
             plt.hlines([0.5], 0, len(self.fittedValues) + 1, "black", linestyles='dashed')
             plt.legend(loc='upper left')
             plt.show()
@@ -210,7 +212,7 @@ class ANFIS:
         self.accuracy = self.precision = self.recall = 0
 
         predicted_data = [x[0] > 0.5 for x in self.fittedValues]
-        correct_data = self.trainY > 0.5
+        correct_data = self.testY > 0.5
 
         for x, y in zip(predicted_data, correct_data):
             if y == 1:

@@ -6,17 +6,32 @@ import anfis.membership.membershipfunction as mf
 import const
 
 class Anfis:
-    def __init__(self, path):
-        self.train_data, self.answer_data = self.loadDataset(path)
+    def __init__(self, dataset_path, k=5, i=0):
+        dataset = self.loadDataset(dataset_path)
+        indeces = range(dataset.shape[0])
+        test_indeces = np.array_split(indeces, k)[i]
+        
+        train_data = []
+        test_data = []
+        for index in indeces:
+            if index in test_indeces:
+                test_data.append(dataset[index])
+            else:
+                train_data.append(dataset[index])
+
+        train_data = np.array(train_data)
+        test_data = np.array(test_data)
+        train_x = train_data[:,0:2]
+        train_y = train_data[:,2]
+        test_x = test_data[:,0:2]
+        test_y = test_data[:,2]
+
         self.mfc = mf.MemFuncs(self.generateMf())
-        self.anfis = anfis.ANFIS(self.train_data, self.answer_data, self.mfc)
+        
+        self.anfis = anfis.ANFIS(train_x, train_y, test_x, test_y, self.mfc)
 
     def loadDataset(self, path):
-        dataset = np.loadtxt(path, delimiter=',',usecols=[1,2,3])
-        train_data = dataset[:,0:2]
-        answer_data = dataset[:,2]
-
-        return train_data, answer_data
+        return np.loadtxt(path, delimiter=',',usecols=[1,2,3])
 
     def generateMf(self):
         mf = [
