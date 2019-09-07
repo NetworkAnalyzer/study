@@ -76,21 +76,42 @@ class Anfis:
         return self.anfis.min_error
 
 if __name__ == "__main__":
-    carAnfis = Anfis(const.DATASET_PATH_FOR_CAR)
-    trackAnfis = Anfis(const.DATASET_PATH_FOR_TRACK)
+    def mean(array):
+        return float(sum(array)) / len(array)
 
-    carAnfis.train(epochs=40)
-    trackAnfis.train(epochs=40)
+    cars = []
+    tracks = []
 
+    cars_accuracy = []
+    cars_precision = []
+    cars_recall = []
+    tracks_accuracy = []
+    tracks_precision = []
+    tracks_recall = []
+
+    for i in range(int(const.K)):
+        cars.append(Anfis(const.DATASET_PATH_FOR_CAR))
+        tracks.append(Anfis(const.DATASET_PATH_FOR_TRACK))
+
+        cars[i].train(epochs=40)
+        tracks[i].train(epochs=40)
+
+        cars_accuracy.append(cars[i].anfis.accuracy)
+        cars_precision.append(cars[i].anfis.precision)
+        cars_recall.append(cars[i].anfis.recall)
+        
+        tracks_accuracy.append(tracks[i].anfis.accuracy)
+        tracks_precision.append(tracks[i].anfis.precision)
+        tracks_recall.append(tracks[i].anfis.recall)
+    
     print('car────────────────────────')
-    print('accuracy:{0}'.format(carAnfis.anfis.accuracy))
-    print('precision:{0}'.format(carAnfis.anfis.precision))
-    print('recall:{0}'.format(carAnfis.anfis.recall))
-    
+    print('accuracy:{0}'.format(mean(cars_accuracy)))
+    print('precision:{0}'.format(mean(cars_precision)))
+    print('recall:{0}'.format(mean(cars_recall)))
+
     print('track──────────────────────')
-    print('accuracy:{0}'.format(trackAnfis.anfis.accuracy))
-    print('precision:{0}'.format(trackAnfis.anfis.precision))
-    print('recall:{0}'.format(trackAnfis.anfis.recall))
+    print('accuracy:{0}'.format(mean(tracks_accuracy)))
+    print('precision:{0}'.format(mean(tracks_precision)))
+    print('recall:{0}'.format(mean(tracks_recall)))
     
-    carAnfis.plotResult()
-    trackAnfis.plotResult()
+        
