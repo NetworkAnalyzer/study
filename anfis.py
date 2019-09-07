@@ -7,16 +7,16 @@ import const
 
 class Anfis:
     def __init__(self, path):
-        self.train_data, self.test_data = self.loadDataset(path)
+        self.train_data, self.answer_data = self.loadDataset(path)
         self.mfc = mf.MemFuncs(self.generateMf())
-        self.anfis = anfis.ANFIS(self.train_data, self.test_data, self.mfc)
+        self.anfis = anfis.ANFIS(self.train_data, self.answer_data, self.mfc)
 
     def loadDataset(self, path):
         dataset = np.loadtxt(path, delimiter=',',usecols=[1,2,3])
         train_data = dataset[:,0:2]
-        test_data = dataset[:,2]
+        answer_data = dataset[:,2]
 
-        return train_data, test_data
+        return train_data, answer_data
 
     def generateMf(self):
         mf = [
