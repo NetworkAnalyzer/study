@@ -9,6 +9,7 @@ import numpy as np
 from .membership import mfDerivs
 import copy
 import const
+import time
 
 class ANFIS:
     def __init__(self, trainX, trainY, testX, testY, mf):
@@ -47,6 +48,8 @@ class ANFIS:
         self.recall = 0
         self.f_measure = 0
 
+        self.time = 0
+
     # Least Square Estimation 最小2乗推定値
     def LSE(self, A, B, initialGamma = 1000.):
         coeffMat = A
@@ -63,6 +66,7 @@ class ANFIS:
     # Hybrid learning, i.e. Descent Gradient for precedents and Least Squares Estimation for consequents.
     # trainHybridJangOffLine(学習回数, 学習を終える誤差, )
     def trainHybridJangOffLine(self, epochs=5, tolerance=1e-5, initialGamma=1000, k=0.01):
+        start = time.time()
 
         self.trainingType = 'trainHybridJangOffLine'
         convergence = False
@@ -137,6 +141,9 @@ class ANFIS:
         self.residuals = self.testY - self.fittedValues[:,0]
 
         self.aggregate()
+
+        end = time.time()
+        self.time = end - start
 
         return self.fittedValues
 

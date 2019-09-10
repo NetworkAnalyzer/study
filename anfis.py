@@ -94,7 +94,9 @@ if __name__ == "__main__":
         tracks.append(Anfis(const.DATASET_PATH_FOR_TRACK))
 
         cars[i].train(epochs=40)
+        print('car_{0}: {1}s'.format(i, cars[i].anfis.time))
         tracks[i].train(epochs=40)
+        print('track_{0}: {1}s'.format(i, tracks[i].anfis.time))
 
         cars_accuracy.append(cars[i].anfis.accuracy)
         cars_precision.append(cars[i].anfis.precision)
