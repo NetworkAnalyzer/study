@@ -57,10 +57,8 @@ class Anfis:
         return mf
 
     def train(self, epochs=20):
-        """
-        epochs >= 2
-        """
-        self.anfis.trainHybridJangOffLine(epochs=epochs)
+        # epochs >= 2
+        self.anfis.trainHybridJangOffLine(epochs=int(epochs))
 
     def plotMF(self, x, inputNumber):
         from skfuzzy import control as ctrl
@@ -93,9 +91,9 @@ if __name__ == "__main__":
         cars.append(Anfis(const.DATASET_PATH_FOR_CAR))
         tracks.append(Anfis(const.DATASET_PATH_FOR_TRACK))
 
-        cars[i].train(epochs=40)
+        cars[i].train(epochs=const.EPOCHS)
         print('car_{0}: {1}s'.format(i, cars[i].anfis.time))
-        tracks[i].train(epochs=40)
+        tracks[i].train(epochs=const.EPOCHS)
         print('track_{0}: {1}s'.format(i, tracks[i].anfis.time))
 
         cars_accuracy.append(cars[i].anfis.accuracy)
