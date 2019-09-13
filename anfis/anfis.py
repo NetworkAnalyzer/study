@@ -248,12 +248,11 @@ def forwardHalfPass(ANFISObj, Xs):
     layerFour = np.empty(0,)
     wSum = []
 
-    # なんのpatternだろう？
-    for pattern in range(len(Xs[:,0])):
         # layer one: 入力をメンバシップ関数に適用する
         # layerOne: [[val, val, val, val], [val, val, val, val], ...]
         # 単純にMFListのすべてに値を適用した結果を返す
-        layerOne = ANFISObj.memClass.evaluateMF(Xs[pattern,:])
+    for i in range(len(Xs[:,0])):
+        layerOne = ANFISObj.memClass.evaluateMF(Xs[i,:])
 
         # layer two
         # len(ANFISObj.rules): 各メンバシップ関数の中身の直積 4^メンバシップ関数の数
@@ -269,7 +268,7 @@ def forwardHalfPass(ANFISObj, Xs):
         # layerTwo: メンバシップ関数の値を掛け合わせた値である「適応度」を計算した
         # layerTwo ==> [w1, w2, w3, ... , w4^x] の1次元配列
         layerTwo = np.array([np.product(x) for x in miAlloc]).T
-        if pattern == 0:
+        if i == 0:
             w = layerTwo
         else:
             w = np.vstack((w,layerTwo))
@@ -278,19 +277,19 @@ def forwardHalfPass(ANFISObj, Xs):
         wSum.append(np.sum(layerTwo))
         # numpyでは，[2, 4]/2 ==> [1, 2] となる
         # 4^x個の要素すべてを正規化する 形は変わらず [w1, w2, w3, ..., w4^x]            
-        layerThree = layerTwo/wSum[pattern]
+        layerThree = layerTwo/wSum[i]
 
         # prep for layer four (bit of a hack)
-        # np.append(Xs[pattern,:]) ==> [x1, x2, x3]
-        # np.append(Xs[pattern,:],1) ==> [x1, x2, x3, 1]
+        # np.append(Xs[i,:]) ==> [x1, x2, x3]
+        # np.append(Xs[i,:],1) ==> [x1, x2, x3, 1]
         # for x in layerThree:
-        #   x * np.append(Xs[pattern,:],1) ==> [x*x1, x*x2, x*x3, x*1]
+        #   x * np.append(Xs[i,:],1) ==> [x*x1, x*x2, x*x3, x*1]
         # 論文の w_bar * x_j にあたる 末尾に追加した1は，Σの外にある定数項の分
-        rowHolder = np.concatenate([x*np.append(Xs[pattern,:],1) for x in layerThree])
+        rowHolder = np.concatenate([x*np.append(Xs[i,:],1) for x in layerThree])
         layerFour = np.append(layerFour,rowHolder)
 
     w = w.T
-    layerFour = np.array(np.array_split(layerFour,pattern + 1))
+    layerFour = np.array(np.array_split(layerFour,i + 1))
 
     return layerFour, wSum, w
 
