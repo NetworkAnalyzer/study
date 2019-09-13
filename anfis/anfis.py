@@ -244,15 +244,13 @@ def plusOne(n):
 # Xsには，121組のmeanとsigmaが配列形式で格納されている
 # 第1層から第4層まで
 # return 第4層の出力, 適応率の合計, 適応率の配列？
-def forwardHalfPass(ANFISObj, Xs):
+def forwardHalfPass(anfis, trainData):
     layerFour = np.empty(0,)
     wSum = []
 
         # layer one: 入力をメンバシップ関数に適用する
         # layerOne: [[val, val, val, val], [val, val, val, val], ...]
         # 単純にMFListのすべてに値を適用した結果を返す
-    for i in range(len(Xs[:,0])):
-        layerOne = ANFISObj.memClass.evaluateMF(Xs[i,:])
 
         # layer two
         # len(ANFISObj.rules): 各メンバシップ関数の中身の直積 4^メンバシップ関数の数
@@ -261,12 +259,14 @@ def forwardHalfPass(ANFISObj, Xs):
         #     for x in range(len(ANFISObj.rules[0])):
         #         layerOne[x][ANFISObj.rules[row][x]]
         # 4*x個しかない値を4^x個の要素をもつ配列に展開する．なぜ？
-        miAlloc = [[layerOne[x][ANFISObj.rules[row][x]] for x in range(len(ANFISObj.rules[0]))] for row in range(len(ANFISObj.rules))]
         # np.product(x) は配列xの全要素の積．たとえば，np.product([1, 2, 3, 4]) ==> 24
         # miAllocでメンバシップ関数の出力を展開したのは，一発ですべての積を計算するためだった
         # .T は転置
         # layerTwo: メンバシップ関数の値を掛け合わせた値である「適応度」を計算した
         # layerTwo ==> [w1, w2, w3, ... , w4^x] の1次元配列
+    for i in range(len(trainData[:,0])):
+        layerOne = anfis.memClass.evaluateMF(trainData[i,:])
+        miAlloc = [[layerOne[x][anfis.rules[row][x]] for x in range(len(anfis.rules[0]))] for row in range(len(anfis.rules))]
         layerTwo = np.array([np.product(x) for x in miAlloc]).T
         if i == 0:
             w = layerTwo
@@ -285,7 +285,7 @@ def forwardHalfPass(ANFISObj, Xs):
         # for x in layerThree:
         #   x * np.append(Xs[i,:],1) ==> [x*x1, x*x2, x*x3, x*1]
         # 論文の w_bar * x_j にあたる 末尾に追加した1は，Σの外にある定数項の分
-        rowHolder = np.concatenate([x*np.append(Xs[i,:],1) for x in layerThree])
+        rowHolder = np.concatenate([x*np.append(trainData[i,:],1) for x in layerThree])
         layerFour = np.append(layerFour,rowHolder)
 
     w = w.T
