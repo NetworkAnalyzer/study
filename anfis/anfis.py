@@ -240,50 +240,45 @@ class ANFIS:
 def plusOne(n):
     return n + 1
 
-# Xsには，121組のmeanとsigmaが配列形式で格納されている
-# 第1層から第4層まで
-# return 第4層の出力, 適応率の合計, 適応率の配列？
 def forwardHalfPass(anfis, trainData):
     layerFour = np.empty(0,)
     wSum = []
 
-        # layer one: 入力をメンバシップ関数に適用する
-        # layerOne: [[val, val, val, val], [val, val, val, val], ...]
-        # 単純にMFListのすべてに値を適用した結果を返す
-
-        # layer two
-        # len(ANFISObj.rules): 各メンバシップ関数の中身の直積 4^メンバシップ関数の数
-        # len(ANFISObj.rules[0]): メンバシップ関数の中身 常に4
-        # for row in range(len(ANFISObj.rules)):
-        #     for x in range(len(ANFISObj.rules[0])):
-        #         layerOne[x][ANFISObj.rules[row][x]]
-        # 4*x個しかない値を4^x個の要素をもつ配列に展開する．なぜ？
-        # np.product(x) は配列xの全要素の積．たとえば，np.product([1, 2, 3, 4]) ==> 24
-        # miAllocでメンバシップ関数の出力を展開したのは，一発ですべての積を計算するためだった
-        # .T は転置
-        # layerTwo: メンバシップ関数の値を掛け合わせた値である「適応度」を計算した
-        # layerTwo ==> [w1, w2, w3, ... , w4^x] の1次元配列
     for i in range(len(trainData[:,0])):
+        # layer 1: 入力をメンバシップ関数に適用する
+        #          1つの入力に対して複数のMFがあるので値が増える
+        # trainData[i,:] => [0.0589 0.6108]
+        # layerOne => [[0.9990, 0.9980], [0.9570, 0.9843]]
         layerOne = anfis.memClass.evaluateMF(trainData[i,:])
+
+        # layer 2: 適応度 (MFの出力を掛け合わせた値) を計算する
+        # layerOne => [[a1, a2], [b1, b2]] のとき
+        # miAlloc  => [[a1, b1], [a1, b2], [a2, b1], [a2, b2]] (layerOne[0]とlayerOne[1]の直積)
+        # layerTwo => [a1*b1 a1*b2 a2*b1 a2*b2]
         miAlloc = [[layerOne[x][anfis.rules[row][x]] for x in range(len(anfis.rules[0]))] for row in range(len(anfis.rules))]
         layerTwo = np.array([np.product(x) for x in miAlloc]).T
-        if i == 0:
-            w = layerTwo
-        else:
-            w = np.vstack((w,layerTwo))
 
-        # layer three: 正規化
+        # 適応度を重みとして扱う
+        # w = [w1 w2 w3 w4]
+        w = layerTwo if i == 0 else np.vstack((w,layerTwo))
+
+        # layer 3: 適応度を正規化する
+        # layerThree = [w1/wSum[i] w2/wSum[i] w3/wSum[i] w4/wSum[i]]
         wSum.append(np.sum(layerTwo))
-        # numpyでは，[2, 4]/2 ==> [1, 2] となる
-        # 4^x個の要素すべてを正規化する 形は変わらず [w1, w2, w3, ..., w4^x]            
         layerThree = layerTwo/wSum[i]
 
-        # prep for layer four (bit of a hack)
-        # np.append(Xs[i,:]) ==> [x1, x2, x3]
-        # np.append(Xs[i,:],1) ==> [x1, x2, x3, 1]
-        # for x in layerThree:
-        #   x * np.append(Xs[i,:],1) ==> [x*x1, x*x2, x*x3, x*1]
-        # 論文の w_bar * x_j にあたる 末尾に追加した1は，Σの外にある定数項の分
+        # layer 4: 何をしているかわからない
+        # np.append(trainData[i,:],1) = [a b 1]
+        # [x * [a b 1] for x in [w1 w2 w3 w4]] = [
+        #     array[w1*a w1*b w1*1],
+        #     array[w2*a w2*b w2*1],
+        #     array[w3*a w3*b w3*1],
+        #     array[w4*a w4*b w4*1]
+        # ]
+        # rowHolder = [
+        #    w1*a w1*b w1*1 w2*a w2*b w2*1
+        #    w3*a w3*b w3*1 w4*a w4*b w4*1
+        # ]
         rowHolder = np.concatenate([x*np.append(trainData[i,:],1) for x in layerThree])
         layerFour = np.append(layerFour,rowHolder)
 
