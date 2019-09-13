@@ -30,7 +30,7 @@ if __name__ == "__main__":
                 print(object.image)
                 image.show('trimming', object.image, gray=True)
 
-                cv2.rectangle(video.current_color, top_left, bottom_right, const.RECT_COLOR, 2)
+                cv2.rectangle(video.current_color, top_left, bottom_right, const.RECT_COLOR_TRACK, 2)
 
         cv2.imshow('result', video.current_color)
 

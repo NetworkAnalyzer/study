@@ -21,7 +21,10 @@ EPOCHS = os.getenv('EPOCHS')
 DELAY = 40 # ms
 MIN_AREA = 500 # height * width (px)
 MAX_AREA = 2200
-RECT_COLOR = (0, 255, 0)
+
+# (B, G, R)
+RECT_COLOR_CAR = (0, 255, 0)
+RECT_COLOR_TRACK = (0, 0, 255)
 
 if __name__ == "__main__":
     print(basePath())
