@@ -208,8 +208,8 @@ class ANFIS:
             print(self.trainingType)
         else:
             import matplotlib.pyplot as plt
-            plt.plot(map(plusOne, list(range(len(self.fittedValues)))),self.fittedValues,'or', label='trained')
-            plt.plot(map(plusOne, list(range(len(self.testY)))),self.testY,'^b', label='original')
+            plt.plot(list(map(plusOne, list(range(len(self.fittedValues))))), self.fittedValues, 'or', label='trained')
+            plt.plot(list(map(plusOne, list(range(len(self.testY))))), self.testY, '^b', label='original')
             plt.hlines([0.5], 0, len(self.fittedValues) + 1, "black", linestyles='dashed')
             plt.legend(loc='upper left')
             plt.show()
