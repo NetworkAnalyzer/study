@@ -18,7 +18,6 @@ class ANFIS:
         self.testX = np.array(copy.copy(testX))
         self.testY = np.array(copy.copy(testY))
 
-        self.XLen = len(self.trainX)
         self.memClass = copy.deepcopy(mf)
         self.memFuncs = self.memClass.MFList
         self.memFuncsByVariable = [[x for x in range(len(self.memFuncs[z]))] for z in range(len(self.memFuncs))]
