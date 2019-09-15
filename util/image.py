@@ -3,7 +3,7 @@
 import cv2
 import matplotlib.pyplot as plt
 
-def show(self, name, image, gray=False):
+def show(name, image, gray=False):
     plt.title(name)
     plt.imshow(image)
 
