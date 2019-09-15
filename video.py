@@ -3,9 +3,14 @@
 import cv2
 import os
 import const
+from object import Object
 import util.image as image
 
+TYPE_PALY = 0
 TYPE_DETECTION = 10
+TYPE_DISPLAY = 20
+TYPE_SELECTION = 30
+TYPE_ALL_SAVING = 40
 
 class Video:
     def __init__(self, path):
@@ -18,16 +23,32 @@ class Video:
     def open(self, path):
         return cv2.VideoCapture(path)
 
-    def play(self, type=None):
+    def play(self, type=TYPE_PALY, start_from=0):
+        for i in range(start_from):
+            self.moveToNextFrame()
+
+        cnt = 1
         while(self.current_color is not None):
 
-            if type is TYPE_DETECTION:
+            if type >= TYPE_DETECTION:
                 threshold = image.subtract(self.before_gray, self.current_gray)
                 contours, heirarchy = image.findContours(threshold)
 
                 for contour in contours:
                     if const.MIN_AREA < cv2.contourArea(contour) < const.MAX_AREA:
                         x, y, w, h = cv2.boundingRect(contour)
+
+                        if type >= TYPE_DISPLAY:
+                            object = Object(x, y, w, h)
+                            object.image = video.current_gray[y:y+h, x:x+w]
+                            image.show('trimmed', object.image, gray=True)
+
+                        if type >= TYPE_SELECTION:
+                            k = cv2.waitKey(0) & 0xFF
+                            if k == ord('t') or k == ord('c'):
+                                cv2.imwrite('image/{0}_{1}.png'.format(cnt, chr(k)), object.image)
+                                cnt+=1
+                        
                         cv2.rectangle(self.current_color, (x, y), (x+w, y+h), const.RECT_COLOR_TRACK, 2)
 
             cv2.imshow(self.file_name, self.current_color)
@@ -39,8 +60,14 @@ class Video:
 
         cv2.destroyAllWindows()
 
-    def playWithDetection(self):
-        self.play(type=TYPE_DETECTION)
+    def playWithDetection(self, start_from=0):
+        self.play(type=TYPE_DETECTION, start_from=start_from)
+
+    def playWithDisplay(self, start_from=0):
+        self.play(type=TYPE_DISPLAY, start_from=start_from)
+
+    def playWithSelection(self, start_from=0):
+        self.play(type=TYPE_SELECTION, start_from=start_from)
 
     def close(self):
         self.video.release()
@@ -55,5 +82,5 @@ class Video:
 
 if __name__ == "__main__":
     video = Video(const.VIDEO_PATH)
-    video.playWithDetection()
+    video.playWithSelection(start_from=1000)
     video.close()
