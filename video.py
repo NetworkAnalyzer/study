@@ -14,6 +14,17 @@ class Video:
     def open(self, path):
         return cv2.VideoCapture(path)
 
+    def play(self):
+        while(self.current_color is not None):
+            cv2.imshow('result', video.current_color)
+
+            if cv2.waitKey(1) == ord('q'):
+                break
+
+            self.moveToNextFrame()
+
+        cv2.destroyAllWindows()
+
     def close(self):
         self.video.release()
 
@@ -33,10 +44,5 @@ class Video:
 
 if __name__ == "__main__":
     video = Video(const.VIDEO_PATH)
-    image = Image()
-    image.show('current', video.before_gray)
-    image.show('next', video.current_color)
-    video.moveToNextFrame()
-    image.show('current', video.before_gray)
-    image.show('next', video.current_color)
-
+    video.play()
+    video.close()
