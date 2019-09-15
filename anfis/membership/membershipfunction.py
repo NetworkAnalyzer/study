@@ -18,20 +18,13 @@ class MemFuncs:
 
     # rowInput: [mean, sigma]
     def evaluateMF(self, rowInput):
-        # len(rowInout)    ==> 2
         # rowInput ==> [x1, x2]
-        # len(self.MFList) ==> 2
+        # len(rowInput)    ==> 2
         # self.MFList ==> [[mf, mf, mf, mf], [mf, mf, mf, mf]]
-        # 同じ 2 でも意味合いが違う
-        # MFが8個あるように思うが，実は2個なのか？じゃあなんで1個のMFにつき4つのmeanとsigmaが必要なのか？
-        # このコードでは，メンバシップ関数の数と入力の数が合ってないと，メンバシップ関数を適用できないみたい
+        # len(self.MFList) ==> 2
         if len(rowInput) != len(self.MFList):
             print("Number of variables does not match number of rule sets")
 
-        for i in range(len(rowInput)):
-            for k in range(len(self.MFList[i])):
-                # self.funcDict[self.MFList[i][k][0]] は関数名gaussmf
-                # gaussmf()
-                self.funcDict[self.MFList[i][k][0]](rowInput[i],**self.MFList[i][k][1])
-
+        # x1をMFList[0]のMFすべてに，x2をMFList[1]のMFすべてにそれぞれ適用した結果を得る
+        # 1つの入力に対するMFの数は，4つである必要がない
         return [[self.funcDict[self.MFList[i][k][0]](rowInput[i],**self.MFList[i][k][1]) for k in range(len(self.MFList[i]))] for i in range(len(rowInput))]

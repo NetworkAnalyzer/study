@@ -19,13 +19,29 @@ class ANFIS:
         self.testY = np.array(copy.copy(testY))
 
         self.memClass = copy.deepcopy(mf)
+        # self.memFuncs = [
+        #     [
+        #         ['gaussmf', {'mean': 0.5, 'sigma': 10.0}],
+        #         ['gaussmf', {'mean': 0.5, 'sigma': 7.0}]
+        #     ],
+        #     [
+        #         ['gaussmf', {'mean': 0.5, 'sigma': 5.0}],
+        #         ['gaussmf', {'mean': 10, 'sigma': 5.0}]
+        #     ]
+        # ]
         self.memFuncs = self.memClass.MFList
+        # self.memFuncsByVariable = [
+        #     [0, 1],
+        #     [0, 1]
+        # ]
         self.memFuncsByVariable = [[x for x in range(len(self.memFuncs[z]))] for z in range(len(self.memFuncs))]
         self.rules = np.array(list(itertools.product(*self.memFuncsByVariable)))
         self.consequents = np.empty(self.trainY.ndim * len(self.rules) * (self.trainX.shape[1] + 1))
         self.consequents.fill(0)
         self.errors = np.empty(0)
         self.min_error = 100
+        # homo: 同じ
+        # self.memFuncsHomo = True | False
         self.memFuncsHomo = all(len(i)==len(self.memFuncsByVariable[0]) for i in self.memFuncsByVariable)
         self.trainingType = 'Not trained yet'
 
@@ -62,7 +78,6 @@ class ANFIS:
             x = x + (np.dot(S,np.dot(np.matrix(a).transpose(),(np.matrix(b)-np.dot(np.matrix(a),x)))))
         return x
 
-    # Hybrid learning, i.e. Descent Gradient for precedents and Least Squares Estimation for consequents.
     # trainHybridJangOffLine(学習回数, 学習を終える誤差, )
     def trainHybridJangOffLine(self, epochs=5, tolerance=1e-5, initialGamma=1000, k=0.01):
         start = time.time()
@@ -79,6 +94,7 @@ class ANFIS:
             #layer five: least squares estimate
             layerFive = np.array(self.LSE(layerFour,self.trainY,initialGamma))
             self.consequents = layerFive
+            # np.dot: 内積
             layerFive = np.dot(layerFour,layerFive)
 
             #error
@@ -95,6 +111,10 @@ class ANFIS:
             # back propagation
             if convergence is not True:
                 cols = list(range(len(self.trainX[0,:])))
+                # dE_dAlpha = [
+                #     [array([a, b]), array([c, d])],
+                #     [array([e, f]), array([g, h])]
+                # ]
                 dE_dAlpha = list(backprop(self, colX, cols, wSum, w, layerFive) for colX in range(self.trainX.shape[1]))
 
 
@@ -106,15 +126,18 @@ class ANFIS:
                 if (self.errors[-1] < self.errors[-2]) and (self.errors[-3] < self.errors[-2]) and (self.errors[-3] < self.errors[-4]) and (self.errors[-5] > self.errors[-4]):
                     k = k * 0.9
 
-            ## handling of variables with a different number of MFs
+            # t = [a b c d e f g h]
             t = []
             for x in range(len(dE_dAlpha)):
                 for y in range(len(dE_dAlpha[x])):
                     for z in range(len(dE_dAlpha[x][y])):
                         t.append(dE_dAlpha[x][y][z])
 
+            # eta: 学習率
             eta = k / np.abs(np.sum(t))
 
+            # isinf: 無限大かどうか
+            # tの各値がe-17くらいのとき，sum(t)が0になる
             if(np.isinf(eta)):
                 eta = k
 
@@ -126,14 +149,21 @@ class ANFIS:
                         for z in range(len(dE_dAlpha[x][y])):
                             dAlpha[x][y][z] = -eta * dE_dAlpha[x][y][z]
             else:
+                # dAlpha = [
+                #     [[-eta*a -eta*b][-eta*c -eta*d]]
+                #     [[-eta*e -eta*f][-eta*g -eta*h]]
+                # ]
                 dAlpha = -eta * np.array(dE_dAlpha)
 
 
-            for varsWithMemFuncs in range(len(self.memFuncs)):
-                for MFs in range(len(self.memFuncsByVariable[varsWithMemFuncs])):
-                    paramList = sorted(self.memFuncs[varsWithMemFuncs][MFs][1])
+            for i in range(len(self.memFuncs)):
+                for MFs in range(len(self.memFuncsByVariable[i])):
+                    # paramList = ['mean', 'sigma']
+                    paramList = sorted(self.memFuncs[i][MFs][1])
                     for param in range(len(paramList)):
-                        self.memFuncs[varsWithMemFuncs][MFs][1][paramList[param]] = self.memFuncs[varsWithMemFuncs][MFs][1][paramList[param]] + dAlpha[varsWithMemFuncs][MFs][param]
+                        # Update memFuncs
+                        self.memFuncs[i][MFs][1][paramList[param]] += dAlpha[i][MFs][param]
+            
             epoch = epoch + 1
 
         self.fittedValues = predict(self, self.testX)
