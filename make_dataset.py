@@ -13,9 +13,9 @@ if __name__ == "__main__":
     def getAns(path, dataset_for):
         return 1 if path.find('_{0}'.format(dataset_for)) is not -1 else 0
 
-    paths = glob.glob("image/trimmed_*.png")
+    paths = glob.glob("image/*.png")
 
-    for dataset_for in ['car', 'track']:
+    for dataset_for in ['c', 't']:
         cnt = 1
         data = []
         for path in paths:
