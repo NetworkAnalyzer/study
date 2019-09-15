@@ -103,9 +103,8 @@ class ANFIS:
             if error < self.min_error:
                 self.min_error = error
 
-            if len(self.errors) != 0:
-                if self.errors[len(self.errors)-1] < tolerance:
-                    convergence = True
+            if error < tolerance:
+                convergence = True
 
             # back propagation
             if convergence is not True:
