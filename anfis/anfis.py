@@ -175,8 +175,6 @@ class ANFIS:
 
         self.isTrained = True
 
-        return self.fittedValues
-
 
     def plotErrors(self):
         if self.isTrained:
