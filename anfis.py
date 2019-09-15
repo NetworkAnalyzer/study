@@ -58,7 +58,7 @@ class Anfis:
 
     def train(self, epochs=20):
         # epochs >= 2
-        self.anfis.trainHybridJangOffLine(epochs=int(epochs))
+        self.anfis.train(epochs=int(epochs))
 
     def plotMF(self, x, inputNumber):
         from skfuzzy import control as ctrl

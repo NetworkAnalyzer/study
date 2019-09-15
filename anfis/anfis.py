@@ -78,8 +78,8 @@ class ANFIS:
             x = x + (np.dot(S,np.dot(np.matrix(a).transpose(),(np.matrix(b)-np.dot(np.matrix(a),x)))))
         return x
 
-    # trainHybridJangOffLine(学習回数, 学習を終える誤差, )
-    def trainHybridJangOffLine(self, epochs=5, tolerance=1e-5, initialGamma=1000, k=0.01):
+    def train(self, epochs=5, tolerance=1e-5, initialGamma=1000, k=0.01):
+        # Jang's Hybrid off-line training
         start = time.time()
 
         convergence = False
