@@ -43,7 +43,7 @@ class ANFIS:
         # homo: 同じ
         # self.memFuncsHomo = True | False
         self.memFuncsHomo = all(len(i)==len(self.memFuncsByVariable[0]) for i in self.memFuncsByVariable)
-        self.trainingType = 'Not trained yet'
+        self.isTrained = False
 
         """
         True Positive: 正解であるはずのデータを正解であると判定した
@@ -82,7 +82,6 @@ class ANFIS:
     def trainHybridJangOffLine(self, epochs=5, tolerance=1e-5, initialGamma=1000, k=0.01):
         start = time.time()
 
-        self.trainingType = 'trainHybridJangOffLine'
         convergence = False
         epoch = 1
 
@@ -174,18 +173,20 @@ class ANFIS:
         end = time.time()
         self.time = end - start
 
+        self.isTrained = True
+
         return self.fittedValues
 
 
     def plotErrors(self):
-        if self.trainingType == 'Not trained yet':
-            print(self.trainingType)
-        else:
+        if self.isTrained:
             import matplotlib.pyplot as plt
             plt.plot(list(range(len(self.errors))),self.errors,'o', label='errors')
             plt.ylabel('error')
             plt.xlabel('epoch')
             plt.show()
+        else:
+            print('ANFIS is not trained yet.')
 
     def plotMF(self, x, inputNumber):
         """plotMF(self, x, inputNumber)
@@ -233,15 +234,15 @@ class ANFIS:
         plt.show()
 
     def plotResults(self):
-        if self.trainingType == 'Not trained yet':
-            print(self.trainingType)
-        else:
+        if self.isTrained:
             import matplotlib.pyplot as plt
             plt.plot(list(map(plusOne, list(range(len(self.fittedValues))))), self.fittedValues, 'or', label='trained')
             plt.plot(list(map(plusOne, list(range(len(self.testY))))), self.testY, '^b', label='original')
             plt.hlines([0.5], 0, len(self.fittedValues) + 1, "black", linestyles='dashed')
             plt.legend(loc='upper left')
             plt.show()
+        else:
+            print('ANFIS is not trained yet.')
 
     def aggregate(self):
         self.TP = self.FN = self.TN = self.FP = 0
