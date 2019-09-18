@@ -78,40 +78,40 @@ if __name__ == "__main__":
         return float(sum(array)) / len(array)
 
     cars = []
-    tracks = []
+    trucks = []
 
     cars_accuracy = []
     cars_precision = []
     cars_recall = []
-    tracks_accuracy = []
-    tracks_precision = []
-    tracks_recall = []
+    trucks_accuracy = []
+    trucks_precision = []
+    trucks_recall = []
 
     for i in range(int(const.K)):
         cars.append(Anfis(const.DATASET_PATH_FOR_CAR))
-        tracks.append(Anfis(const.DATASET_PATH_FOR_TRACK))
+        trucks.append(Anfis(const.DATASET_PATH_FOR_TRUCK))
 
         cars[i].train(epochs=const.EPOCHS)
         print('car_{0}: {1}s'.format(i, cars[i].anfis.time))
-        tracks[i].train(epochs=const.EPOCHS)
-        print('track_{0}: {1}s'.format(i, tracks[i].anfis.time))
+        trucks[i].train(epochs=const.EPOCHS)
+        print('truck_{0}: {1}s'.format(i, trucks[i].anfis.time))
 
         cars_accuracy.append(cars[i].anfis.accuracy)
         cars_precision.append(cars[i].anfis.precision)
         cars_recall.append(cars[i].anfis.recall)
         
-        tracks_accuracy.append(tracks[i].anfis.accuracy)
-        tracks_precision.append(tracks[i].anfis.precision)
-        tracks_recall.append(tracks[i].anfis.recall)
+        trucks_accuracy.append(trucks[i].anfis.accuracy)
+        trucks_precision.append(trucks[i].anfis.precision)
+        trucks_recall.append(trucks[i].anfis.recall)
     
     print('car────────────────────────')
     print('accuracy:{0}'.format(mean(cars_accuracy)))
     print('precision:{0}'.format(mean(cars_precision)))
     print('recall:{0}'.format(mean(cars_recall)))
 
-    print('track──────────────────────')
-    print('accuracy:{0}'.format(mean(tracks_accuracy)))
-    print('precision:{0}'.format(mean(tracks_precision)))
-    print('recall:{0}'.format(mean(tracks_recall)))
+    print('truck──────────────────────')
+    print('accuracy:{0}'.format(mean(trucks_accuracy)))
+    print('precision:{0}'.format(mean(trucks_precision)))
+    print('recall:{0}'.format(mean(trucks_recall)))
     
         
