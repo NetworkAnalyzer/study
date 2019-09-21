@@ -27,29 +27,36 @@ class Video:
         for i in range(start_from):
             self.moveToNextFrame()
 
+        classifier = cv2.CascadeClassifier(const.CASCADE_PATH)
+
         cnt = 1
         while(self.current_color is not None):
 
             if type >= TYPE_DETECTION:
-                threshold = image.subtract(self.before_gray, self.current_gray)
-                contours, heirarchy = image.findContours(threshold)
 
-                for contour in contours:
-                    if const.MIN_AREA < cv2.contourArea(contour) < const.MAX_AREA:
-                        x, y, w, h = cv2.boundingRect(contour)
+                objects = classifier.detectMultiScale(
+                    self.current_color,
+                    scaleFactor = 1.05,
+                    minNeighbors = 2,
+                    minSize = (10, 10)
+                )
 
-                        if type >= TYPE_DISPLAY:
-                            object = Object(x, y, w, h)
-                            object.image = video.current_gray[y:y+h, x:x+w]
-                            image.show('trimmed', object.image, gray=True)
+                for object in objects:
+                    (x, y) = tuple(object[0:2])
+                    (w, h) = tuple(object[2:4])
 
-                        if type >= TYPE_SELECTION:
-                            k = cv2.waitKey(0) & 0xFF
-                            if k == ord('t') or k == ord('c'):
-                                cv2.imwrite('image/{0}_{1}.png'.format(cnt, chr(k)), object.image)
-                                cnt+=1
-                        
-                        cv2.rectangle(self.current_color, (x, y), (x+w, y+h), const.RECT_COLOR_TRACK, 2)
+                    if type >= TYPE_DISPLAY:
+                        object = Object(x, y, w, h)
+                        object.image = video.current_gray[y:y+h, x:x+w]
+                        image.show('trimmed', object.image, gray=True)
+
+                    if type >= TYPE_SELECTION:
+                        k = cv2.waitKey(0) & 0xFF
+                        if k == ord('t') or k == ord('c'):
+                            cv2.imwrite('image/{0}_{1}.png'.format(cnt, chr(k)), object.image)
+                            cnt+=1
+                    
+                    cv2.rectangle(self.current_color, (x, y), (x+w, y+h), const.RECT_COLOR_TRUCK, 2)
 
             cv2.imshow(self.file_name, self.current_color)
 
