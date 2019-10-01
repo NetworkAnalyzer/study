@@ -13,6 +13,7 @@ matplotlib = "*"
 numpy = "*"
 click = "*"
 scikit-fuzzy = "*"
+scikit-image = "*"
 
 [requires]
 python_version = "3.7"

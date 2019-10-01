@@ -43,6 +43,7 @@ class Image:
     
 if __name__ == "__main__":
     original = cv2.imread(const.IMAGE_PATH)
-    filterd  = image.gaborFilter(original, degree=70)
+    features  = image.glcm(original, degree=0)
+    print(features)
 
-    image.show('gabor filter', filterd, gray=True)
+    # image.show('gabor filter', filterd, gray=True)

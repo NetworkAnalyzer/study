@@ -3,6 +3,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from skimage.feature import greycomatrix, greycoprops
 
 def show(name, image, gray=False):
     plt.title(name)
@@ -32,3 +33,15 @@ def gaborFilter(image, degree=0):
     gray = cvt2Gray(image)
 
     return cv2.filter2D(gray, -1, filter)
+
+def glcm(image, degree=0):
+    gray = cvt2Gray(image)
+    glcm = greycomatrix(gray, [1], [degree])
+
+    features = ['contrast', 'dissimilarity', 'homogeneity', 'energy', 'correlation']
+
+    values = []
+    for feature in features:
+        values.append(greycoprops(glcm, feature)[0][0])
+
+    return values
