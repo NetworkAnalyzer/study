@@ -2,6 +2,8 @@
 
 import cv2
 from object import Object
+import util.image as image
+import const
 import matplotlib.pyplot as plt
 
 class Image:
@@ -40,23 +42,7 @@ class Image:
         return cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     
 if __name__ == "__main__":
-    image = Image(path, path)
-    const = Const()
+    original = cv2.imread(const.IMAGE_PATH)
+    filterd  = image.gaborFilter(original, degree=70)
 
-    threshold = image.subtract()
-    contours, heirarchy = image.findContours(threshold)
-
-    for contour in contours:
-        if cv2.contourArea(contour) > const.MIN_AREA:
-            x, y, w, h = cv2.boundingRect(contour)
-
-            object = Object(x, y, w, h)
-            print(object.compactness)
-            print(object.hwr)
-
-            top_left = (x, y)
-            bottom_right = (x + w, y + h)
-
-            cv2.rectangle(image.current_img, top_left, bottom_right, const.RECT_COLOR, 2)
-
-    image.show()
+    image.show('gabor filter', filterd, gray=True)

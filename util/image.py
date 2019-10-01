@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import cv2
+import numpy as np
 import matplotlib.pyplot as plt
 
 def show(name, image, gray=False):
@@ -25,3 +26,9 @@ def subtract(before=None, current=None):
 
 def findContours(image):
     return cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+def gaborFilter(image, degree=0):
+    filter = cv2.getGaborKernel((20, 20), 4.0, np.radians(degree), 10, 0.5, 0)
+    gray = cvt2Gray(image)
+
+    return cv2.filter2D(gray, -1, filter)

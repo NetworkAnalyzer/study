@@ -4,6 +4,7 @@ import numpy as np
 import anfis.anfis as anfis
 import anfis.membership.membershipfunction as mf
 import const
+import csv
 
 class Anfis:
     def __init__(self, dataset_path, k=5, i=0):
@@ -35,24 +36,32 @@ class Anfis:
 
     def generateMf(self):
         mf = [
-            # ここで大きな配列が3つあるのは，入力が3つだから．入力が増えれば配列も増える
-            # 入力の順番と配列の順番は対応していて，入力に近い値がmeanに入っている
-            # たとえば，1番目の入力は1以下だから1以下の数値が，3番目の入力は100以下だから100以下の数値が入っている
             [
-                # 'gaussmf'はメンバシップ関数名，meanは中心値，sigmaは幅
-                # 問題は，なぜ1つの入力に4つのmfが定義されているのか
-                ['gaussmf',{'mean':0.5,'sigma':1.}],
-                ['gaussmf',{'mean':0.5,'sigma':2.}],
                 ['gaussmf',{'mean':0.5,'sigma':10.}],
-                ['gaussmf',{'mean':0.5,'sigma':7.}]
+                ['gaussmf',{'mean':0.6,'sigma':7.}]
             ],
             [
-                ['gaussmf',{'mean':2.8,'sigma':2.}],
                 ['gaussmf',{'mean':1.5,'sigma':3.}],
-                ['gaussmf',{'mean':1.5,'sigma':10.}],
-                ['gaussmf',{'mean':1.5,'sigma':5.}]
+                ['gaussmf',{'mean':0.5,'sigma':10.}],
             ],
         ]
+
+        # デフォルトのMF
+        # なぜ1つの入力に対して4つのメンバシップ関数が必要なのか (4つでなくてもいい？)
+        # mf = [
+        #     [
+        #         ['gaussmf',{'mean':0.,'sigma':1.}],
+        #         ['gaussmf',{'mean':-1.,'sigma':2.}],
+        #         ['gaussmf',{'mean':-4.,'sigma':10.}],
+        #         ['gaussmf',{'mean':-7.,'sigma':7.}]
+        #     ],
+        #     [
+        #         ['gaussmf',{'mean':1.,'sigma':2.}],
+        #         ['gaussmf',{'mean':2.,'sigma':3.}],
+        #         ['gaussmf',{'mean':-2.,'sigma':10.}],
+        #         ['gaussmf',{'mean':-10.5,'sigma':5.}]
+        #     ]
+        # ]
 
         return mf
 
@@ -76,6 +85,18 @@ class Anfis:
 if __name__ == "__main__":
     def mean(array):
         return float(sum(array)) / len(array)
+    
+    def putResult(anfis):
+        errors = [[round(error, 4)] for i, error in enumerate(anfis.anfis.errors)]
+
+        # params = []
+        # for (before, after) in zip(anfis.generateMf(), anfis.anfis.memClass.MFList):
+        #     params.append([[before[i][1][type], after[i][1][type]] for type in ['mean', 'sigma'] for i in range(0,len(before))])
+
+        with open('result_{0}.csv'.format(const.EPOCHS), 'w') as f:
+            w = csv.writer(f, lineterminator='\n')
+            w.writerows(errors)
+            # w.writerows(params)
 
     cars = []
     trucks = []

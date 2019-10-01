@@ -13,6 +13,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(basePath('.env'))
 
 VIDEO_PATH = basePath(os.getenv('VIDEO_PATH'))
+IMAGE_PATH = basePath(os.getenv('IMAGE_PATH'))
 CASCADE_PATH = basePath(os.getenv('CASCADE_PATH'))
 DATASET_PATH_FOR_CAR = basePath(os.getenv('DATASET_PATH_FOR_CAR'))
 DATASET_PATH_FOR_TRUCK = basePath(os.getenv('DATASET_PATH_FOR_TRUCK'))
