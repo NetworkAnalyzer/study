@@ -20,12 +20,15 @@ if __name__ == "__main__":
         data = []
         for path in paths:
             image = Image(path)
-            object = Object(0, 0, image.height, image.width)
+            object = Object(0, 0, image.height, image.width, image.image)
 
             data.append([
                 cnt,
-                round(object.compactness, 4),
-                round(object.hwr, 4),
+                round(object.contrast, 4),
+                round(object.dissimilarity, 4),
+                round(object.homogeneity, 4),
+                round(object.asm, 4),
+                round(object.correlation, 4),
                 getAns(path, dataset_for)
             ])
 
