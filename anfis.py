@@ -9,30 +9,39 @@ import csv
 class Anfis:
     def __init__(self, dataset_path, k=5, i=0):
         dataset = self.loadDataset(dataset_path)
+        train_data, test_data = self.splitDataset(dataset, k, i)
+        
+        train_x = train_data[:,0:2]
+        train_y = train_data[:,2]
+        test_x  = test_data[:,0:2]
+        test_y  = test_data[:,2]
+
+        self.mfc = mf.MemFuncs(self.generateMf())
+        self.anfis = anfis.ANFIS(train_x, train_y, test_x, test_y, self.mfc)
+
+    def loadDataset(self, path):
+        return np.loadtxt(path, delimiter=',', usecols=[1,2,3])
+
+    def splitDataset(self, dataset, k, i):
+        """
+        dataset: array
+        k: 交差検証の分割数
+        i: 交差検証の回数 (何回目か)
+        """
+
         indeces = range(dataset.shape[0])
         test_indeces = np.array_split(indeces, k)[i]
         
         train_data = []
         test_data = []
+
         for index in indeces:
             if index in test_indeces:
                 test_data.append(dataset[index])
             else:
                 train_data.append(dataset[index])
 
-        train_data = np.array(train_data)
-        test_data = np.array(test_data)
-        train_x = train_data[:,0:2]
-        train_y = train_data[:,2]
-        test_x = test_data[:,0:2]
-        test_y = test_data[:,2]
-
-        self.mfc = mf.MemFuncs(self.generateMf())
-        
-        self.anfis = anfis.ANFIS(train_x, train_y, test_x, test_y, self.mfc)
-
-    def loadDataset(self, path):
-        return np.loadtxt(path, delimiter=',',usecols=[1,2,3])
+        return np.array(train_data), np.array(test_data)
 
     def generateMf(self):
         mf = [
