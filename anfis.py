@@ -46,23 +46,6 @@ class Anfis:
             ],
         ]
 
-        # デフォルトのMF
-        # なぜ1つの入力に対して4つのメンバシップ関数が必要なのか (4つでなくてもいい？)
-        # mf = [
-        #     [
-        #         ['gaussmf',{'mean':0.,'sigma':1.}],
-        #         ['gaussmf',{'mean':-1.,'sigma':2.}],
-        #         ['gaussmf',{'mean':-4.,'sigma':10.}],
-        #         ['gaussmf',{'mean':-7.,'sigma':7.}]
-        #     ],
-        #     [
-        #         ['gaussmf',{'mean':1.,'sigma':2.}],
-        #         ['gaussmf',{'mean':2.,'sigma':3.}],
-        #         ['gaussmf',{'mean':-2.,'sigma':10.}],
-        #         ['gaussmf',{'mean':-10.5,'sigma':5.}]
-        #     ]
-        # ]
-
         return mf
 
     def train(self, epochs=20):
@@ -89,14 +72,9 @@ if __name__ == "__main__":
     def putResult(anfis):
         errors = [[round(error, 4)] for i, error in enumerate(anfis.anfis.errors)]
 
-        # params = []
-        # for (before, after) in zip(anfis.generateMf(), anfis.anfis.memClass.MFList):
-        #     params.append([[before[i][1][type], after[i][1][type]] for type in ['mean', 'sigma'] for i in range(0,len(before))])
-
         with open('result_{0}.csv'.format(const.EPOCHS), 'w') as f:
             w = csv.writer(f, lineterminator='\n')
             w.writerows(errors)
-            # w.writerows(params)
 
     cars = []
     trucks = []
@@ -134,5 +112,3 @@ if __name__ == "__main__":
     print('accuracy:{0}'.format(mean(trucks_accuracy)))
     print('precision:{0}'.format(mean(trucks_precision)))
     print('recall:{0}'.format(mean(trucks_recall)))
-    
-        
