@@ -5,6 +5,7 @@ import anfis.anfis as anfis
 import anfis.membership.membershipfunction as mf
 import const
 import csv
+from util.array import mean
 
 class Anfis:
     def __init__(self, dataset_path, k=5, i=0):
@@ -45,14 +46,38 @@ class Anfis:
         return np.array(train_data), np.array(test_data)
 
     def generateMf(self):
+        # TODO: 入力する値の数に合わせてMFを生成する
+        # def generateMf(self, train_data, type='gaussmf'):
+        #     data_count = train_data.shape[1] - 1
+        #     mf_count = 2
+        #     sigma = 10
+        #     mf = []
+
+        #     for i in range(data_count):
+        #         print(mean(train_data[:, i]))
+
+        #         for j in range(mf_count):
+
         mf = [
             [
-                ['gaussmf',{'mean':0.5,'sigma':10.}],
-                ['gaussmf',{'mean':0.6,'sigma':7.}]
+                ['gaussmf',{'mean':160,'sigma':10.}],
+                ['gaussmf',{'mean':170,'sigma':7.}]
             ],
             [
-                ['gaussmf',{'mean':1.5,'sigma':3.}],
-                ['gaussmf',{'mean':0.5,'sigma':10.}],
+                ['gaussmf',{'mean':10,'sigma':3.}],
+                ['gaussmf',{'mean':8,'sigma':10.}],
+            ],
+            [
+                ['gaussmf',{'mean':0.2,'sigma':3.}],
+                ['gaussmf',{'mean':0.3,'sigma':10.}],
+            ],
+            [
+                ['gaussmf',{'mean':0.002,'sigma':3.}],
+                ['gaussmf',{'mean':0.001,'sigma':10.}],
+            ],
+            [
+                ['gaussmf',{'mean':1,'sigma':3.}],
+                ['gaussmf',{'mean':0.9,'sigma':10.}],
             ],
         ]
 
