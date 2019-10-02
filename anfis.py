@@ -9,18 +9,19 @@ import csv
 class Anfis:
     def __init__(self, dataset_path, k=5, i=0):
         dataset = self.loadDataset(dataset_path)
-        train_data, test_data = self.splitDataset(dataset, k, i)
+        train_data, test_data = self.splitDataset(dataset[:, 1:], k, i)
         
-        train_x = train_data[:,0:2]
-        train_y = train_data[:,2]
-        test_x  = test_data[:,0:2]
-        test_y  = test_data[:,2]
+        last = train_data.shape[1] - 1
+        train_x = train_data[:,0:last]
+        train_y = train_data[:,last]
+        test_x  = test_data[:,0:last]
+        test_y  = test_data[:,last]
 
         self.mfc = mf.MemFuncs(self.generateMf())
         self.anfis = anfis.ANFIS(train_x, train_y, test_x, test_y, self.mfc)
 
     def loadDataset(self, path):
-        return np.loadtxt(path, delimiter=',', usecols=[1,2,3])
+        return np.loadtxt(path, delimiter=',')
 
     def splitDataset(self, dataset, k, i):
         """
