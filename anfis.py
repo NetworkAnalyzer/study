@@ -50,39 +50,39 @@ class Anfis:
         # TODO: 入力する値の数に合わせてMFを生成する
 
         # for_car
-        mf = [
-            [
-                ['gaussmf',{'mean':0.05,'sigma':10.}],
-                ['gaussmf',{'mean':0.06,'sigma':7.}]
-            ],[
-                ['gaussmf',{'mean':1,'sigma':3.}],
-                ['gaussmf',{'mean':2,'sigma':10.}],
-            ]
-        ]
-        
-        # for_c
         # mf = [
         #     [
-        #         ['gaussmf',{'mean':160,'sigma':10.}],
-        #         ['gaussmf',{'mean':170,'sigma':7.}]
-        #     ],
-        #     [
-        #         ['gaussmf',{'mean':10,'sigma':3.}],
-        #         ['gaussmf',{'mean':8,'sigma':10.}],
-        #     ],
-        #     [
-        #         ['gaussmf',{'mean':0.2,'sigma':3.}],
-        #         ['gaussmf',{'mean':0.3,'sigma':10.}],
-        #     ],
-        #     [
-        #         ['gaussmf',{'mean':0.002,'sigma':3.}],
-        #         ['gaussmf',{'mean':0.001,'sigma':10.}],
-        #     ],
-        #     [
+        #         ['gaussmf',{'mean':0.05,'sigma':10.}],
+        #         ['gaussmf',{'mean':0.06,'sigma':7.}]
+        #     ],[
         #         ['gaussmf',{'mean':1,'sigma':3.}],
-        #         ['gaussmf',{'mean':0.9,'sigma':10.}],
-        #     ],
+        #         ['gaussmf',{'mean':2,'sigma':10.}],
+        #     ]
         # ]
+        
+        # for_c
+        mf = [
+            [
+                ['gaussmf',{'mean':160,'sigma':10.}],
+                ['gaussmf',{'mean':170,'sigma':7.}]
+            ],
+            [
+                ['gaussmf',{'mean':10,'sigma':3.}],
+                ['gaussmf',{'mean':8,'sigma':10.}],
+            ],
+            [
+                ['gaussmf',{'mean':0.2,'sigma':3.}],
+                ['gaussmf',{'mean':0.3,'sigma':10.}],
+            ],
+            [
+                ['gaussmf',{'mean':0.002,'sigma':3.}],
+                ['gaussmf',{'mean':0.001,'sigma':10.}],
+            ],
+            [
+                ['gaussmf',{'mean':1,'sigma':3.}],
+                ['gaussmf',{'mean':0.9,'sigma':10.}],
+            ],
+        ]
 
         return mf
 
