@@ -6,6 +6,7 @@ import anfis.membership.membershipfunction as mf
 import const
 import csv
 from util.array import mean
+from exception import InvalidEpochsValueError
 
 class Anfis:
     def __init__(self, dataset_path, k=5, i=0):
@@ -84,8 +85,12 @@ class Anfis:
         return mf
 
     def train(self, epochs=20):
-        # epochs >= 2
-        self.anfis.train(epochs=int(epochs))
+        epochs = int(epochs)
+
+        if epochs < 2:
+            raise InvalidEpochsValueError("you need to set epochs more than 2")
+
+        self.anfis.train(epochs=epochs)
 
     def plotMF(self, x, inputNumber):
         from skfuzzy import control as ctrl
