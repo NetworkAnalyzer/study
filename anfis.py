@@ -31,14 +31,14 @@ class Anfis:
         i: 交差検証の回数 (何回目か)
         """
 
-        indeces = range(dataset.shape[0])
-        test_indeces = np.array_split(indeces, k)[i]
+        indices = range(dataset.shape[0])
+        test_indices = np.array_split(indices, k)[i]
         
         train_data = []
         test_data = []
 
-        for index in indeces:
-            if index in test_indeces:
+        for index in indices:
+            if index in test_indices:
                 test_data.append(dataset[index])
             else:
                 train_data.append(dataset[index])
