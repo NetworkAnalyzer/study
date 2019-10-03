@@ -67,13 +67,23 @@ class ANFIS:
 
     # Least Square Estimation 最小2乗推定値
     def LSE(self, A, B, initialGamma = 1000.):
+        # coeff: 係数
+        # rhs: 右辺
+
+        # 係数行列
         coeffMat = A
+        # 右辺の行列 (答え)
         rhsMat = B
+        # 単位行列
         S = np.eye(coeffMat.shape[1])*initialGamma
-        x = np.zeros((coeffMat.shape[1],1)) # need to correct for multi-dim B
+        # ゼロ行列
+        x = np.zeros((coeffMat.shape[1],1))
+
         for i in range(len(coeffMat[:,0])):
             a = coeffMat[i,:]
             b = np.array(rhsMat[i])
+            # ((S・a^T)・a)・S
+            # / (1 + ((S・a)・a))
             S = S - (np.array(np.dot(np.dot(np.dot(S,np.matrix(a).transpose()),np.matrix(a)),S)))/(1+(np.dot(np.dot(S,a),a)))
             x = x + (np.dot(S,np.dot(np.matrix(a).transpose(),(np.matrix(b)-np.dot(np.matrix(a),x)))))
         return x
