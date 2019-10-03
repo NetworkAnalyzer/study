@@ -261,9 +261,9 @@ class ANFIS:
                     self.FN+=1
 
         self.accuracy = float(self.TP + self.FN) / (self.TP + self.FN + self.TN + self.FP)
-        self.precision = float(self.TP) / (self.TP + self.FP) if self.TP + self.FP != 0 else None 
-        self.recall = float(self.TP) / (self.TP + self.TN) if self.TP + self.TN != 0 else None
-        self.f_measure = 2 * self.precision * self.recall / (self.precision + self.recall)
+        self.precision = float(self.TP) / (self.TP + self.FP) if self.TP + self.FP != 0 else 0 
+        self.recall = float(self.TP) / (self.TP + self.TN) if self.TP + self.TN != 0 else 0
+        self.f_measure = 2 * self.precision * self.recall / (self.precision + self.recall) if self.precision + self.recall != 0 else 0
 
 def plusOne(n):
     return n + 1
