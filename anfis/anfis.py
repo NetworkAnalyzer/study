@@ -165,7 +165,7 @@ class ANFIS:
             epoch = epoch + 1
 
         self.fittedValues = predict(self, self.testX)
-        self.residuals = self.testY - self.fittedValues[:,0]
+        self.residuals = self.testY - self.fittedValues
 
         self.aggregate()
 
@@ -245,7 +245,7 @@ class ANFIS:
         self.TP = self.FN = self.TN = self.FP = 0
         self.accuracy = self.precision = self.recall = 0
 
-        predicted_data = [x[0] > 0.5 for x in self.fittedValues]
+        predicted_data = [x > 0.5 for x in self.fittedValues]
         correct_data = self.testY > 0.5
 
         for x, y in zip(predicted_data, correct_data):
