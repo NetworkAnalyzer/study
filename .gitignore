@@ -131,7 +131,6 @@ dmypy.json
 # input files
 /video
 /image
-/dataset
 *.mp4
 *.jpg
 *.jpeg
