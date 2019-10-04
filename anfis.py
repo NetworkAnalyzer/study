@@ -63,8 +63,8 @@ class Anfis:
         # for_c
         mf = [
             [
-                ['gaussmf',{'mean':160,'sigma':10.}],
-                ['gaussmf',{'mean':170,'sigma':7.}]
+                ['gaussmf',{'mean':160,'sigma':100.}],
+                ['gaussmf',{'mean':170,'sigma':70.}]
             ],
             [
                 ['gaussmf',{'mean':10,'sigma':3.}],
