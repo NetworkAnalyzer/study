@@ -2,9 +2,9 @@
 
 import cv2
 import os
-import const
-from object import Object
-import util.image as image
+from study import const
+from study.object import Object
+import study.util.image as image
 
 TYPE_PALY = 0
 TYPE_DETECTION = 10

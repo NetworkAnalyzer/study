@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
 
 import cv2
-import util.image as image
-import const
+import study.util.image as image
+from study import const
 import matplotlib.pyplot as plt
 
 

@@ -2,8 +2,8 @@
 
 import glob
 import csv
-from object import Object
-from image import Image
+from study.object import Object
+from study.image import Image
 
 if __name__ == "__main__":
 
