@@ -13,6 +13,9 @@ class Image:
         self.height = self.image.shape[0]
         self.width = self.image.shape[1]
 
+
+# QUESTION: Can I delete this method?
+"""
     def show(self, name, image, gray=False):
         plt.title(name)
         plt.imshow(image)
@@ -21,9 +24,10 @@ class Image:
             plt.gray()
 
         plt.show()
+"""
 
 
-if __name__ == "__main__":
+def main():
     original = cv2.imread(const.IMAGE_PATH)
     features = image.glcm(original, degree=0)
     print(features)

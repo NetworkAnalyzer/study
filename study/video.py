@@ -88,6 +88,7 @@ class Video:
     def close(self):
         self.video.release()
 
+# QUESTION: Are you still using below method?
     def __getNextFrame(self):
         hasNext, frame = self.video.read()
         return frame
@@ -97,7 +98,7 @@ class Video:
         self.current_gray = image.cvt2Gray(self.current_color)
 
 
-if __name__ == "__main__":
+def main():
     video = Video(const.VIDEO_PATH)
     video.playWithSelection(start_from=1000)
     video.close()
