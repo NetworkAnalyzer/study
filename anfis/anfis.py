@@ -36,8 +36,6 @@ class ANFIS:
         # ]
         self.memFuncsByVariable = [[x for x in range(len(self.memFuncs[z]))] for z in range(len(self.memFuncs))]
         self.rules = np.array(list(itertools.product(*self.memFuncsByVariable)))
-        self.consequents = np.empty(self.trainY.ndim * len(self.rules) * (self.trainX.shape[1] + 1))
-        self.consequents.fill(0)
         self.errors = np.empty(0)
         self.min_error = 100
         # homo: 同じ
@@ -95,14 +93,13 @@ class ANFIS:
         convergence = False
         epoch = 1
 
-        while (epoch < epochs) and (convergence is not True):
+        while (epoch < epochs) and (convergence is False):
 
             #layer four: forward pass
             [layerFour, wSum, w] = forwardHalfPass(self, self.trainX)
 
             #layer five: least squares estimate
             layerFive = np.array(self.LSE(layerFour,self.trainY,initialGamma))
-            self.consequents = layerFive
             # np.dot: 内積
             layerFive = np.dot(layerFour,layerFive)
 
@@ -117,14 +114,13 @@ class ANFIS:
                 convergence = True
 
             # back propagation
-            if convergence is not True:
+            if convergence is False:
                 cols = list(range(len(self.trainX[0,:])))
                 # dE_dAlpha = [
                 #     [array([a, b]), array([c, d])],
                 #     [array([e, f]), array([g, h])]
                 # ]
                 dE_dAlpha = list(backprop(self, colX, cols, wSum, w, layerFive) for colX in range(self.trainX.shape[1]))
-
 
             if len(self.errors) >= 4:
                 if (self.errors[-4] > self.errors[-3] > self.errors[-2] > self.errors[-1]):
@@ -172,18 +168,16 @@ class ANFIS:
                         # Update memFuncs
                         self.memFuncs[i][MFs][1][paramList[param]] += dAlpha[i][MFs][param]
             
-            epoch = epoch + 1
+            epoch += 1
 
         self.fittedValues = predict(self, self.testX)
         self.residuals = self.testY - self.fittedValues
 
         self.aggregate()
 
-        end = time.time()
-        self.time = end - start
+        self.time = time.time() - start
 
         self.isTrained = True
-
 
     def plotErrors(self):
         if self.isTrained:
