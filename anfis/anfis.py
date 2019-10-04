@@ -108,7 +108,7 @@ class ANFIS:
 
             #error
             error = np.sum((self.trainY-layerFive.T)**2)
-            print(str(epoch) + ' current error: ' + str(error))
+            print(str(epoch) + ' error: ' + str(error))
             self.errors = np.append(self.errors,error)
             if error < self.min_error:
                 self.min_error = error
