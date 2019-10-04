@@ -1,10 +1,10 @@
 # -*- coding: UTF-8 -*-
 
 import cv2
-from object import Object
 import util.image as image
 import const
 import matplotlib.pyplot as plt
+
 
 class Image:
     def __init__(self, path):
@@ -19,12 +19,13 @@ class Image:
 
         if gray:
             plt.gray()
-            
+
         plt.show()
+
 
 if __name__ == "__main__":
     original = cv2.imread(const.IMAGE_PATH)
-    features  = image.glcm(original, degree=0)
+    features = image.glcm(original, degree=0)
     print(features)
 
     # image.show('gabor filter', filterd, gray=True)

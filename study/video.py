@@ -12,6 +12,7 @@ TYPE_DISPLAY = 20
 TYPE_SELECTION = 30
 TYPE_ALL_SAVING = 40
 
+
 class Video:
     def __init__(self, path):
         self.file_name = os.path.basename(path)
@@ -30,15 +31,15 @@ class Video:
         classifier = cv2.CascadeClassifier(const.CASCADE_PATH)
 
         cnt = 1
-        while(self.current_color is not None):
+        while self.current_color is not None:
 
             if type >= TYPE_DETECTION:
 
                 objects = classifier.detectMultiScale(
                     self.current_color,
-                    scaleFactor = 1.05,
-                    minNeighbors = 2,
-                    minSize = (10, 10)
+                    scaleFactor=1.05,
+                    minNeighbors=2,
+                    minSize=(10, 10),
                 )
 
                 for object in objects:
@@ -47,16 +48,24 @@ class Video:
 
                     if type >= TYPE_DISPLAY:
                         object = Object(x, y, w, h)
-                        object.image = video.current_gray[y:y+h, x:x+w]
+                        object.image = video.current_gray[y : y + h, x : x + w]
                         image.show('trimmed', object.image, gray=True)
 
                     if type >= TYPE_SELECTION:
                         k = cv2.waitKey(0) & 0xFF
                         if k == ord('t') or k == ord('c'):
-                            cv2.imwrite('image/{0}_{1}.png'.format(cnt, chr(k)), object.image)
-                            cnt+=1
-                    
-                    cv2.rectangle(self.current_color, (x, y), (x+w, y+h), const.RECT_COLOR_TRUCK, 2)
+                            cv2.imwrite(
+                                'image/{0}_{1}.png'.format(cnt, chr(k)), object.image
+                            )
+                            cnt += 1
+
+                    cv2.rectangle(
+                        self.current_color,
+                        (x, y),
+                        (x + w, y + h),
+                        const.RECT_COLOR_TRUCK,
+                        2,
+                    )
 
             cv2.imshow(self.file_name, self.current_color)
 
@@ -86,6 +95,7 @@ class Video:
     def moveToNextFrame(self):
         self.current_color = self.__getNextFrame()
         self.current_gray = image.cvt2Gray(self.current_color)
+
 
 if __name__ == "__main__":
     video = Video(const.VIDEO_PATH)
