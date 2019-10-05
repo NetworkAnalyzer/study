@@ -1,13 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-import cv2
-
-import glob
 import csv
-import re
-from object import Object
+import glob
 from image import Image
-import const
+from object import Object
 
 if __name__ == "__main__":
     def getAns(path, dataset_for):
