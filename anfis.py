@@ -108,9 +108,6 @@ class Anfis:
         return self.anfis.min_error
 
 if __name__ == "__main__":
-    def mean(array):
-        return float(sum(array)) / len(array)
-    
     def putResult(anfis):
         errors = [[round(error, 4)] for i, error in enumerate(anfis.anfis.errors)]
 
