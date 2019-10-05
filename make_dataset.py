@@ -34,6 +34,8 @@ if __name__ == "__main__":
 
             cnt+=1
 
-        with open('dataset/dataset_for_{0}.csv'.format(dataset_for), 'w') as f:
+        file_name = 'dataset/dataset_for_{0}.csv'.format(dataset_for)
+        with open(file_name, 'w') as f:
             w = csv.writer(f, lineterminator='\n')
             w.writerows(data)
+        print('{0} is generated'.format(file_name))
