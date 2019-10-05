@@ -14,22 +14,7 @@ class Image:
         self.width = self.image.shape[1]
 
 
-# QUESTION: Can I delete this method?
-"""
-    def show(self, name, image, gray=False):
-        plt.title(name)
-        plt.imshow(image)
-
-        if gray:
-            plt.gray()
-
-        plt.show()
-"""
-
-
 def main():
     original = cv2.imread(const.IMAGE_PATH)
     features = image.glcm(original, degree=0)
     print(features)
-
-    # image.show('gabor filter', filterd, gray=True)
