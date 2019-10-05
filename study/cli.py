@@ -28,6 +28,6 @@ def constant():
     const.main()
 
 
-@cli.command()
-def anfis():
+@cli.command("anfis")
+def anf():
     anfis.main()
