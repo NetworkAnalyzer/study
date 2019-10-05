@@ -3,8 +3,8 @@
 import numpy as np
 import anfis.anfis as anfis
 import anfis.membership.membershipfunction as mf
+
 import const
-import csv
 from util.array import mean
 from exception import InvalidEpochsValueError
 
@@ -108,13 +108,6 @@ class Anfis:
         return self.anfis.min_error
 
 if __name__ == "__main__":
-    def putResult(anfis):
-        errors = [[round(error, 4)] for i, error in enumerate(anfis.anfis.errors)]
-
-        with open('result_{0}.csv'.format(const.EPOCHS), 'w') as f:
-            w = csv.writer(f, lineterminator='\n')
-            w.writerows(errors)
-
     cars = []
     trucks = []
 
