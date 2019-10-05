@@ -1,23 +1,24 @@
 # -*- coding: UTF-8 -*-
 
 import numpy as np
-import anfis.anfis as anfis
-import anfis.membership.membershipfunction as mf
+import study.anfis.anfis as anfis
+import study.anfis.membership.membershipfunction as mf
+from study import const
+import csv
+from study.util.array import mean
+from study.exception import InvalidEpochsValueError
 
-import const
-from util.array import mean
-from exception import InvalidEpochsValueError
 
 class Anfis:
     def __init__(self, dataset_path, k=5, i=0):
         dataset = self.loadDataset(dataset_path)
         train_data, test_data = self.splitDataset(dataset[:, 1:], k, i)
-        
+
         last = train_data.shape[1] - 1
-        train_x = train_data[:,0:last]
-        train_y = train_data[:,last]
-        test_x  = test_data[:,0:last]
-        test_y  = test_data[:,last]
+        train_x = train_data[:, 0:last]
+        train_y = train_data[:, last]
+        test_x = test_data[:, 0:last]
+        test_y = test_data[:, last]
 
         self.mfc = mf.MemFuncs(self.generateMf())
         self.anfis = anfis.ANFIS(train_x, train_y, test_x, test_y, self.mfc)
@@ -34,7 +35,7 @@ class Anfis:
 
         indices = range(dataset.shape[0])
         test_indices = np.array_split(indices, k)[i]
-        
+
         train_data = []
         test_data = []
 
@@ -59,28 +60,28 @@ class Anfis:
         #         ['gaussmf',{'mean':2,'sigma':10.}],
         #     ]
         # ]
-        
+
         # for_c
         mf = [
             [
-                ['gaussmf',{'mean':160,'sigma':100.}],
-                ['gaussmf',{'mean':170,'sigma':70.}]
+                ['gaussmf', {'mean': 160, 'sigma': 100.0}],
+                ['gaussmf', {'mean': 170, 'sigma': 70.0}],
             ],
             [
-                ['gaussmf',{'mean':10,'sigma':3.}],
-                ['gaussmf',{'mean':8,'sigma':10.}],
+                ['gaussmf', {'mean': 10, 'sigma': 3.0}],
+                ['gaussmf', {'mean': 8, 'sigma': 10.0}],
             ],
             [
-                ['gaussmf',{'mean':0.2,'sigma':3.}],
-                ['gaussmf',{'mean':0.3,'sigma':10.}],
+                ['gaussmf', {'mean': 0.2, 'sigma': 3.0}],
+                ['gaussmf', {'mean': 0.3, 'sigma': 10.0}],
             ],
             [
-                ['gaussmf',{'mean':0.002,'sigma':3.}],
-                ['gaussmf',{'mean':0.001,'sigma':10.}],
+                ['gaussmf', {'mean': 0.002, 'sigma': 3.0}],
+                ['gaussmf', {'mean': 0.001, 'sigma': 10.0}],
             ],
             [
-                ['gaussmf',{'mean':1,'sigma':3.}],
-                ['gaussmf',{'mean':0.9,'sigma':10.}],
+                ['gaussmf', {'mean': 1, 'sigma': 3.0}],
+                ['gaussmf', {'mean': 0.9, 'sigma': 10.0}],
             ],
         ]
 
@@ -96,6 +97,7 @@ class Anfis:
 
     def plotMF(self, x, inputNumber):
         from skfuzzy import control as ctrl
+
         self.anfis.plotMF(ctrl.Antecedent(x, 'T').universe, inputNumber)
 
     def plotResult(self):
@@ -103,11 +105,13 @@ class Anfis:
 
     def plotErrors(self):
         self.anfis.plotErrors()
-    
+
     def getMinError(self):
         return self.anfis.min_error
 
-if __name__ == "__main__":
+
+def main():
+
     cars = []
     trucks = []
 
@@ -130,11 +134,11 @@ if __name__ == "__main__":
         cars_accuracy.append(cars[i].anfis.accuracy)
         cars_precision.append(cars[i].anfis.precision)
         cars_recall.append(cars[i].anfis.recall)
-        
+
         trucks_accuracy.append(trucks[i].anfis.accuracy)
         trucks_precision.append(trucks[i].anfis.precision)
         trucks_recall.append(trucks[i].anfis.recall)
-    
+
     print('car────────────────────────')
     print('accuracy:{0}'.format(mean(cars_accuracy)))
     print('precision:{0}'.format(mean(cars_precision)))
