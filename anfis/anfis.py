@@ -36,6 +36,8 @@ class ANFIS:
         # ]
         self.memFuncsByVariable = [[x for x in range(len(self.memFuncs[z]))] for z in range(len(self.memFuncs))]
         self.rules = np.array(list(itertools.product(*self.memFuncsByVariable)))
+        self.consequents = np.empty(self.trainY.ndim * len(self.rules) * (self.trainX.shape[1] + 1))
+        self.consequents.fill(0)
         self.errors = np.empty(0)
         self.min_error = 100
         # homo: 同じ
@@ -100,6 +102,7 @@ class ANFIS:
 
             #layer five: least squares estimate
             layerFive = np.array(self.LSE(layerFour,self.trainY,initialGamma))
+            self.consequents = layerFive
             # np.dot: 内積
             layerFive = np.dot(layerFour,layerFive)
 
