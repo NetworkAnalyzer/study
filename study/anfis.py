@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
 
 import numpy as np
-import study.anfis.anfis as anfis
-import study.anfis.membership.membershipfunction as mf
+import study.twmeggs.anfis.anfis as anfis
+import study.twmeggs.anfis.membership.membershipfunction as mf
 from study import const
 import csv
 from study.util.array import mean
