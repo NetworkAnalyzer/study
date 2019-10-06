@@ -110,41 +110,37 @@ class Anfis:
         return self.anfis.min_error
 
 
+def printResult(anfises, name):
+    
+    accuracy = 0
+    precision = 0
+    recall = 0
+
+    for anfis in anfises:
+        accuracy += anfis.anfis.accuracy
+        precision += anfis.anfis.precision
+        recall += anfis.anfis.recall
+
+    print('{0}────────────────────────'.format(name))
+    print('accuracy:  {0}'.format(round(accuracy / int(const.K), 4)))
+    print('precision: {0}'.format(round(precision / int(const.K), 4)))
+    print('recall:    {0}'.format(round(recall / int(const.K), 4)))
+    print()
+
+
 def main():
 
     cars = []
     trucks = []
-
-    cars_accuracy = []
-    cars_precision = []
-    cars_recall = []
-    trucks_accuracy = []
-    trucks_precision = []
-    trucks_recall = []
 
     for i in range(int(const.K)):
         cars.append(Anfis(const.DATASET_PATH_FOR_CAR))
         trucks.append(Anfis(const.DATASET_PATH_FOR_TRUCK))
 
         cars[i].train(epochs=const.EPOCHS)
-        print('car_{0}: {1}s'.format(i, cars[i].anfis.time))
+        print('car_{0}: {1}s\n'.format(i, cars[i].anfis.time))
         trucks[i].train(epochs=const.EPOCHS)
-        print('truck_{0}: {1}s'.format(i, trucks[i].anfis.time))
+        print('truck_{0}: {1}s\n'.format(i, trucks[i].anfis.time))
 
-        cars_accuracy.append(cars[i].anfis.accuracy)
-        cars_precision.append(cars[i].anfis.precision)
-        cars_recall.append(cars[i].anfis.recall)
-
-        trucks_accuracy.append(trucks[i].anfis.accuracy)
-        trucks_precision.append(trucks[i].anfis.precision)
-        trucks_recall.append(trucks[i].anfis.recall)
-
-    print('car────────────────────────')
-    print('accuracy:{0}'.format(mean(cars_accuracy)))
-    print('precision:{0}'.format(mean(cars_precision)))
-    print('recall:{0}'.format(mean(cars_recall)))
-
-    print('truck──────────────────────')
-    print('accuracy:{0}'.format(mean(trucks_accuracy)))
-    print('precision:{0}'.format(mean(trucks_precision)))
-    print('recall:{0}'.format(mean(trucks_recall)))
+    printResult(cars, 'car')
+    printResult(trucks, 'truck')
