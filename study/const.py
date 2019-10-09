@@ -17,8 +17,6 @@ load_dotenv(_get_base_path('.env.example'))
 VIDEO_PATH = _get_base_path(os.getenv('VIDEO_PATH'))
 IMAGE_PATH = _get_base_path(os.getenv('IMAGE_PATH'))
 CASCADE_PATH = _get_base_path(os.getenv('CASCADE_PATH'))
-DATASET_PATH_FOR_CAR = _get_base_path(os.getenv('DATASET_PATH_FOR_CAR'))
-DATASET_PATH_FOR_TRUCK = _get_base_path(os.getenv('DATASET_PATH_FOR_TRUCK'))
 K = os.getenv('K')
 EPOCHS = os.getenv('EPOCHS')
 
@@ -35,4 +33,3 @@ def main():
     print(_get_base_path())
     print(BASE_DIR)
     print(VIDEO_PATH)
-    print(DATASET_PATH_FOR_TRUCK)

@@ -122,20 +122,20 @@ def printResult(anfises, name):
         recall += anfis.anfis.recall
 
     print('{0}────────────────────────'.format(name))
-    print('accuracy:  {0}'.format(round(accuracy / int(const.K), 4)))
+    print('accuracy:  {0}'.format((accuracy / int(const.K))))
     print('precision: {0}'.format(round(precision / int(const.K), 4)))
     print('recall:    {0}'.format(round(recall / int(const.K), 4)))
     print()
 
 
-def main():
+def main(dataset_paths):
 
     cars = []
     trucks = []
 
     for i in range(int(const.K)):
-        cars.append(Anfis(const.DATASET_PATH_FOR_CAR))
-        trucks.append(Anfis(const.DATASET_PATH_FOR_TRUCK))
+        cars.append(Anfis(dataset_paths['car']))
+        trucks.append(Anfis(dataset_paths['truck']))
 
         cars[i].train(epochs=const.EPOCHS)
         print('car_{0}: {1}s\n'.format(i, cars[i].anfis.time))
