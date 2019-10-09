@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import cv2
+import base64
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage.feature import greycomatrix, greycoprops

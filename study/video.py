@@ -88,7 +88,6 @@ class Video:
     def close(self):
         self.video.release()
 
-# QUESTION: Are you still using below method?
     def __getNextFrame(self):
         hasNext, frame = self.video.read()
         return frame
