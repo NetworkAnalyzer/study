@@ -47,8 +47,7 @@ class Video:
                     (w, h) = tuple(object[2:4])
 
                     if type >= TYPE_DISPLAY:
-                        object = Object(x, y, w, h)
-                        object.image = video.current_gray[y : y + h, x : x + w]
+                        object = Object(x, y, w, h, self.current_gray[y : y + h, x : x + w])
                         image.show('trimmed', object.image, gray=True)
 
                     if type >= TYPE_SELECTION:
