@@ -9,7 +9,7 @@ import study.util.image as image
 
 class Video:
     def __init__(self, path):
-        self.file_name = os.path.basename(path)
+        self.file_name = os.path.splitext(os.path.basename(path))[0]
         self.video = self.open(path)
         self.current_color = self.__getNextFrame()
         self.current_gray = image.cvt2Gray(self.current_color)
