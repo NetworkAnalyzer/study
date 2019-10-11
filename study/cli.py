@@ -19,8 +19,9 @@ def vid():
 
 
 @cli.command("make_dataset")
-def dataset():
-    make_dataset.main()
+@click.option('--video')
+def dataset(video):
+    make_dataset.main(video)
 
 
 @cli.command("const")
@@ -30,6 +31,7 @@ def constant():
 
 @cli.command("anfis")
 @click.option('--dataset', '-d', default='glcm')
+@click.option('--video', default='')
 def anf(dataset):
 
     dataset_paths = {

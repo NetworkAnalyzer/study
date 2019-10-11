@@ -2,16 +2,22 @@
 
 import glob
 import csv
+import os
+from study.util.path import dataset_path
 from study.object import Object
 from study.image import Image
 
 
 def _getAns(path, dataset_for):
-    return 1 if path.find('_{0}'.format(dataset_for)) is not -1 else 0
+    return 1 if path.find('for_{0}.png'.format(dataset_for)) is not -1 else 0
 
 
-def main():
-    paths = glob.glob("image/*.png")
+def main(video_name):
+
+    paths = glob.glob("image/{0}/*.png".format(video_name))
+
+    os.makedirs(dataset_path(video_name), exist_ok=True)
+
     for dataset_for in ['c', 't']:
         cnt = 1
         data = []
@@ -33,10 +39,11 @@ def main():
 
             cnt += 1
         
-        file_name = 'dataset/dataset_for_{0}.csv'.format(dataset_for)
+        file_name = 'dataset_contrast_for_{0}.csv'.format(dataset_for)
+        output_path = dataset_path(video_name + '/' + file_name)
         
-        with open(file_name, 'w') as f:
+        with open(output_path, 'w') as f:
             w = csv.writer(f, lineterminator='\n')
             w.writerows(data)
 
-        print(file_name + 'is generated')
+        print(output_path + ' is generated')

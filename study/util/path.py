@@ -7,3 +7,6 @@ BASE_DIR = os.path.join(CURRENT_DIR, '..')
 
 def base_path(path=''):
     return os.path.join(BASE_DIR, path)
+
+def dataset_path(path=''):
+    return os.path.join(BASE_DIR, 'dataset', path)
