@@ -1,6 +1,6 @@
 import click
 from . import make_dataset, image, video, const, anfis, logger
-from .util.path import get_base_path
+from .util.path import base_path
 
 @click.group("cli")
 @click.option("--log", default="INFO", help="Logging level of the logger.")
@@ -33,8 +33,8 @@ def constant():
 def anf(dataset):
 
     dataset_paths = {
-        'car'   : get_base_path('dataset/dataset_{0}_for_c.csv'.format(dataset)),
-        'truck' : get_base_path('dataset/dataset_{0}_for_t.csv'.format(dataset))
+        'car'   : base_path('dataset/dataset_{0}_for_c.csv'.format(dataset)),
+        'truck' : base_path('dataset/dataset_{0}_for_t.csv'.format(dataset))
     }
 
     click.echo('use {0}'.format(dataset_paths['car']))
