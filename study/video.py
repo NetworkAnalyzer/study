@@ -2,6 +2,7 @@
 
 import cv2
 import os
+from study.util.path import image_path
 from study import const
 from study.object import Object
 import study.util.image as image
@@ -25,9 +26,7 @@ class Video:
         classifier = cv2.CascadeClassifier(const.CASCADE_PATH)
 
         if save is True:
-            image_path = os.path.join('image', self.file_name)
-            if not os.path.exists(image_path):
-                os.makedirs(image_path, exist_ok=True)
+            os.makedirs(image_path(self.file_name), exist_ok=True)
 
         cnt = 1
         while self.current_color is not None:
@@ -44,7 +43,7 @@ class Video:
                 (w, h) = tuple(object[2:4])
 
                 if save is True:
-                    cv2.imwrite(os.path.join(image_path, '{0}.png'.format(cnt)), self.current_gray[y : y + h, x : x + w])
+                    cv2.imwrite(image_path(self.file_name + '/{0}.png'.format(cnt)), self.current_gray[y : y + h, x : x + w])
                     cnt += 1
 
                 cv2.rectangle(

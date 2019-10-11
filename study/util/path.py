@@ -10,3 +10,6 @@ def base_path(path=''):
 
 def dataset_path(path=''):
     return os.path.join(BASE_DIR, 'dataset', path)
+
+def image_path(path=''):
+    return os.path.join(BASE_DIR, 'image', path)
