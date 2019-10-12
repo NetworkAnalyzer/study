@@ -4,6 +4,7 @@ import numpy as np
 import study.twmeggs.anfis.anfis as anfis
 import study.twmeggs.anfis.membership.membershipfunction as mf
 from study import const
+from study import video
 import csv
 from study.util.array import mean
 from study.exception import InvalidEpochsValueError
@@ -142,5 +143,12 @@ def main(dataset_paths, epochs):
         trucks[i].train(epochs)
         print('truck_{0}: {1}s\n'.format(i, trucks[i].anfis.time))
 
+        video.main(
+            classify=True,
+            anfises={'car' : cars[0].anfis, 'truck' : trucks[0].anfis}
+        )
+
     printResult(cars, 'car')
     printResult(trucks, 'truck')
+    
+    

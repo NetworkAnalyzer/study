@@ -2,11 +2,12 @@
 
 import cv2
 import os
+import numpy as np
 from study.util.path import image_path
 from study import const
 from study.object import Object
 import study.util.image as image
-
+import study.twmeggs.anfis.anfis as twmeggs
 
 class Video:
     def __init__(self, path):
@@ -19,8 +20,16 @@ class Video:
     def open(self, path):
         return cv2.VideoCapture(path)
 
-    def play(self, save=False, start_from=0):
-        for i in range(start_from):
+    def play(self, save, classify, anfises, start_from=0):
+        if classify is True:
+            if anfises is None:
+                print('Error: you need to set anfis object')
+                exit()
+            elif anfises['car'].isTrained is False and anfises['truck'].isTrained is False:
+                print('Error: you need to train anfis before')
+                exit()
+
+        for _ in range(start_from):
             self.moveToNextFrame()
 
         classifier = cv2.CascadeClassifier(const.CASCADE_PATH)
@@ -29,6 +38,7 @@ class Video:
             os.makedirs(image_path(self.file_name), exist_ok=True)
 
         cnt = 1
+        rectangle_color = None
         while self.current_color is not None:
 
             objects = classifier.detectMultiScale(
@@ -42,17 +52,33 @@ class Video:
                 (x, y) = tuple(object[0:2])
                 (w, h) = tuple(object[2:4])
 
+                if classify is True:
+                    features = Object(x, y, w, h, self.current_gray[y : y + h, x : x + w])
+                    # 学習に使用した特徴量を指定する
+                    feature = features.contrast
+
+                    result = [
+                        twmeggs.predict(anfises['car'], np.array([[feature]]))[0][0] > 0.5,
+                        twmeggs.predict(anfises['truck'], np.array([[feature]]))[0][0] > 0.5,
+                    ]
+                    
+                    if result == [True, False]:
+                        rectangle_color = const.RECT_COLOR_CAR
+                    elif result == [False, True]:
+                        rectangle_color = const.RECT_COLOR_TRUCK
+
                 if save is True:
                     cv2.imwrite(image_path(self.file_name + '/{0}.png'.format(cnt)), self.current_gray[y : y + h, x : x + w])
                     cnt += 1
 
-                cv2.rectangle(
-                    self.current_color,
-                    (x, y),
-                    (x + w, y + h),
-                    const.RECT_COLOR_TRUCK,
-                    2,
-                )
+                if rectangle_color is not None:
+                    cv2.rectangle(
+                        self.current_color,
+                        (x, y),
+                        (x + w, y + h),
+                        rectangle_color,
+                        2,
+                    )
 
             if cv2.waitKey(1) == ord('q'):
                 break
@@ -76,7 +102,7 @@ class Video:
     def showFrame(self):
         cv2.imshow(self.file_name, self.current_color)
 
-def main():
+def main(save=False, classify=False, anfises=None):
     video = Video(const.VIDEO_PATH)
-    video.play(save=True)
+    video.play(save=save, classify=classify, anfises=anfises)
     video.close()
