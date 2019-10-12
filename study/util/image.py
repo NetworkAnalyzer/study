@@ -18,6 +18,9 @@ def show(name, image, gray=False):
 def cvt2Gray(frame):
     if frame is None:
         return frame
+    
+    if 3 not in frame.shape:
+        return frame
 
     return cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
