@@ -296,19 +296,17 @@ class ANFIS:
         self.TP = self.FN = self.TN = self.FP = 0
         self.accuracy = self.precision = self.recall = 0
 
-        predicted_data = [x > 0.5 for x in self.fittedValues]
-        correct_data = self.testY > 0.5
-
-        for x, y in zip(predicted_data, correct_data):
-            if y == 1:
-                if x == 1:
+        predicted_data = [1 if x[0] > 0.5 else 0 for x in self.fittedValues]
+        for predicted, answer in zip(predicted_data, self.testY):
+            if predicted == 1:
+                if answer == 1:
                     self.TP += 1
-                elif x == 0:
+                else:
                     self.TN += 1
-            elif y == 0:
-                if x == 1:
+            elif predicted == 0:
+                if answer == 1:
                     self.FP += 1
-                elif x == 0:
+                else:
                     self.FN += 1
 
         self.accuracy = float(self.TP + self.FN) / (
