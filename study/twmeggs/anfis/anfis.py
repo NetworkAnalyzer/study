@@ -144,38 +144,8 @@ class ANFIS:
                     for colX in range(self.trainX.shape[1])
                 )
 
-            if len(self.errors) >= 4:
-                if (
-                    self.errors[-4]
-                    > self.errors[-3]
-                    > self.errors[-2]
-                    > self.errors[-1]
-                ):
-                    k = k * 1.1
-
-            if len(self.errors) >= 5:
-                if (
-                    (self.errors[-1] < self.errors[-2])
-                    and (self.errors[-3] < self.errors[-2])
-                    and (self.errors[-3] < self.errors[-4])
-                    and (self.errors[-5] > self.errors[-4])
-                ):
-                    k = k * 0.9
-
-            # t = [a b c d e f g h]
-            t = []
-            for x in range(len(dE_dAlpha)):
-                for y in range(len(dE_dAlpha[x])):
-                    for z in range(len(dE_dAlpha[x][y])):
-                        t.append(dE_dAlpha[x][y][z])
-
             # eta: 学習率
-            eta = k / np.abs(np.sum(t))
-
-            # isinf: 無限大かどうか
-            # tの各値がe-17くらいのとき，sum(t)が0になる
-            if np.isinf(eta):
-                eta = k
+            eta = self.calcEta(k, dE_dAlpha)
 
             ## handling of variables with a different number of MFs
             dAlpha = copy.deepcopy(dE_dAlpha)
@@ -197,14 +167,11 @@ class ANFIS:
                     paramList = sorted(self.memFuncs[i][MFs][1])
                     for param in range(len(paramList)):
                         # Update memFuncs
-                        self.memFuncs[i][MFs][1][paramList[param]] += dAlpha[i][MFs][
-                            param
-                        ]
+                        self.memFuncs[i][MFs][1][paramList[param]] += dAlpha[i][MFs][param]
 
             epoch += 1
 
         self.fittedValues = predict(self, self.testX)
-        self.residuals = self.testY - self.fittedValues
 
         self.aggregate()
 
@@ -291,6 +258,33 @@ class ANFIS:
             plt.show()
         else:
             print('ANFIS is not trained yet.')
+
+    def calcEta(self, k, dE_dAlpha):
+        if len(self.errors) >= 4:
+            if (self.errors[-4] > self.errors[-3] > self.errors[-2] > self.errors[-1]):
+                k = k * 1.1
+
+        if len(self.errors) >= 5:
+            if ((self.errors[-1] < self.errors[-2]) and (self.errors[-3] < self.errors[-2])
+                and (self.errors[-3] < self.errors[-4]) and (self.errors[-5] > self.errors[-4])):
+                k = k * 0.9
+
+        # t = [a b c d e f g h]
+        t = []
+        for x in range(len(dE_dAlpha)):
+            for y in range(len(dE_dAlpha[x])):
+                for z in range(len(dE_dAlpha[x][y])):
+                    t.append(dE_dAlpha[x][y][z])
+
+        # eta: 学習率
+        eta = k / np.abs(np.sum(t))
+
+        # isinf: 無限大かどうか
+        # tの各値がe-17くらいのとき，sum(t)が0になる
+        if np.isinf(eta):
+            eta = k
+
+        return eta
 
     def aggregate(self):
         self.TP = self.FN = self.TN = self.FP = 0
