@@ -9,7 +9,7 @@ from study.image import Image
 
 
 def _getAns(path, dataset_for):
-    return 1 if path.find('for_{0}.png'.format(dataset_for)) is not -1 else 0
+    return 1 if path.find('_{0}.'.format(dataset_for)) is not -1 else 0
 
 
 def main(video_name):
