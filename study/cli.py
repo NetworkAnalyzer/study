@@ -1,4 +1,5 @@
 import click
+import os
 from . import make_dataset, image, video, const, anfis, logger
 from .util.path import base_path, dataset_path
 
@@ -32,14 +33,15 @@ def constant():
 @cli.command("anfis")
 @click.option('--dataset', '-d', default='glcm')
 @click.option('--video', default='')
-def anf(dataset):
+@click.option('--epochs', default=const.EPOCHS)
+def anf(dataset, video, epochs):
 
     dataset_paths = {
-        'car'   : dataset_path('dataset_{0}_for_c.csv'.format(dataset)),
-        'truck' : dataset_path('dataset_{0}_for_t.csv'.format(dataset))
+        'car'   : dataset_path(os.path.join(video, 'dataset_{0}_for_c.csv'.format(dataset))),
+        'truck' : dataset_path(os.path.join(video, 'dataset_{0}_for_t.csv'.format(dataset)))
     }
 
     click.echo('use {0}'.format(dataset_paths['car']))
     click.echo('use {0}'.format(dataset_paths['truck']))
 
-    anfis.main(dataset_paths)
+    anfis.main(dataset_paths, epochs)

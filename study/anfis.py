@@ -87,7 +87,7 @@ class Anfis:
 
         return mf
 
-    def train(self, epochs=20):
+    def train(self, epochs):
         epochs = int(epochs)
 
         if epochs < 2:
@@ -128,7 +128,7 @@ def printResult(anfises, name):
     print()
 
 
-def main(dataset_paths):
+def main(dataset_paths, epochs):
 
     cars = []
     trucks = []
@@ -137,9 +137,9 @@ def main(dataset_paths):
         cars.append(Anfis(dataset_paths['car']))
         trucks.append(Anfis(dataset_paths['truck']))
 
-        cars[i].train(epochs=const.EPOCHS)
+        cars[i].train(epochs)
         print('car_{0}: {1}s\n'.format(i, cars[i].anfis.time))
-        trucks[i].train(epochs=const.EPOCHS)
+        trucks[i].train(epochs)
         print('truck_{0}: {1}s\n'.format(i, trucks[i].anfis.time))
 
     printResult(cars, 'car')
