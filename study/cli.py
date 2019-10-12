@@ -31,7 +31,7 @@ def constant():
 
 
 @cli.command("anfis")
-@click.option('--dataset', '-d', default='glcm')
+@click.option('--dataset', default='glcm')
 @click.option('--video', default='')
 @click.option('--epochs', default=const.EPOCHS)
 def anf(dataset, video, epochs):
