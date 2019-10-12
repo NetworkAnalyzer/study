@@ -123,7 +123,7 @@ class ANFIS:
             layerFive = np.dot(layerFour, layerFive)
 
             # error
-            error = np.sum((self.trainY - layerFive.T) ** 2)
+            error = np.mean((self.trainY - layerFive.T) ** 2)
             print(str(epoch) + ' error: ' + str(error))
             self.errors = np.append(self.errors, error)
             if error < self.min_error:
