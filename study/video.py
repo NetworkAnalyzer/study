@@ -11,14 +11,15 @@ import study.twmeggs.anfis.anfis as twmeggs
 
 class Video:
     def __init__(self, path):
-        self.file_name = os.path.splitext(os.path.basename(path))[0]
-        self.video = self.open(path)
+        self.path = path
+        self.file_name = os.path.splitext(os.path.basename(self.path))[0]
+        self.video = self.open()
         self.current_color = self.__getNextFrame()
         self.current_gray = image.cvt2Gray(self.current_color)
         self.before_gray = self.current_gray.copy().astype('float')
 
-    def open(self, path):
-        return cv2.VideoCapture(path)
+    def open(self):
+        return cv2.VideoCapture(self.path)
 
     def play(self, save, classify, anfises, start_from=0):
         if classify is True:
