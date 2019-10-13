@@ -43,5 +43,6 @@ def anf(dataset, video, epochs):
 
     click.echo('use {0}'.format(dataset_paths['car']))
     click.echo('use {0}'.format(dataset_paths['truck']))
+    click.echo()
 
     anfis.main(dataset_paths, epochs)
