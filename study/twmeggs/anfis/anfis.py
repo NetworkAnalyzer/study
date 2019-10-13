@@ -124,7 +124,11 @@ class ANFIS:
 
             # error
             error = np.mean((self.trainY - layerFive.T) ** 2)
-            print(str(epoch) + ' error: ' + str(error))
+            if epoch > 1:
+                print(str(epoch) + ' error: ' + str(error) + ' ({0})'.format(error - self.errors[-1]))
+            else:
+                print(str(epoch) + ' error: ' + str(error))
+
             self.errors = np.append(self.errors, error)
             if error < self.min_error:
                 self.min_error = error
@@ -175,7 +179,7 @@ class ANFIS:
 
         self.aggregate()
 
-        self.time = time.time() - start
+        self.time = round(time.time() - start, 2)
 
         self.isTrained = True
 

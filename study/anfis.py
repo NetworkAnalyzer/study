@@ -21,6 +21,10 @@ class Anfis:
         test_x = test_data[:, 0:last]
         test_y = test_data[:, last]
 
+        print('train data: ', train_x.shape[0])
+        print('test data:  ', test_x.shape[0])
+        print()
+
         self.mfc = mf.MemFuncs(self.generateMf())
         self.anfis = anfis.ANFIS(train_x, train_y, test_x, test_y, self.mfc)
 
@@ -135,18 +139,20 @@ def main(dataset_paths, epochs):
     trucks = []
 
     for i in range(int(const.K)):
+        print('car[{0}]────────────────────────'.format(i))
         cars.append(Anfis(dataset_paths['car']))
-        trucks.append(Anfis(dataset_paths['truck']))
-
         cars[i].train(epochs)
-        print('car_{0}: {1}s\n'.format(i, cars[i].anfis.time))
-        trucks[i].train(epochs)
-        print('truck_{0}: {1}s\n'.format(i, trucks[i].anfis.time))
+        print('time: {1}s\n'.format(i, cars[i].anfis.time))
 
-        video.main(
-            classify=True,
-            anfises={'car' : cars[0].anfis, 'truck' : trucks[0].anfis}
-        )
+        print('truck[{0}]──────────────────────'.format(i))
+        trucks.append(Anfis(dataset_paths['truck']))
+        trucks[i].train(epochs)
+        print('time: {1}s\n'.format(i, trucks[i].anfis.time))
+
+        # video.main(
+        #     classify=True,
+        #     anfises={'car' : cars[0].anfis, 'truck' : trucks[0].anfis}
+        # )
 
     printResult(cars, 'car')
     printResult(trucks, 'truck')
