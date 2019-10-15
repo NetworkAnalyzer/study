@@ -54,9 +54,8 @@ class Video:
                 (w, h) = tuple(object[2:4])
 
                 if classify:
-                    features = Object(x, y, w, h, self.current_gray[y : y + h, x : x + w])
-                    # 学習に使用した特徴量を指定する
-                    feature = features.contrast
+                    features = Object(self.current_gray[y : y + h, x : x + w])
+                    feature = features.get(anfises['feature'])
 
                     result = [
                         twmeggs.predict(anfises['car'], np.array([[feature]]))[0][0] > 0.5,
