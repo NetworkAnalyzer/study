@@ -15,7 +15,6 @@ def _getAns(path, dataset_for):
 def main(video_name, feature_name):
 
     paths = glob.glob("image/{0}/*.png".format(video_name))
-
     os.makedirs(dataset_path(video_name), exist_ok=True)
 
     for dataset_for in ['c', 't']:
@@ -23,18 +22,11 @@ def main(video_name, feature_name):
         data = []
         for path in paths:
             image = Image(path)
-            object = Object(0, 0, image.height, image.width, image.image)
-            features = {
-                'contrast'      : round(object.contrast, 4),
-                'dissimilarity' : round(object.dissimilarity, 4),
-                'homogeneity'   : round(object.homogeneity, 4),
-                'asm'           : round(object.asm, 4),
-                'correlation'   : round(object.correlation, 4)
-            }
+            object = Object(image.image)
 
             data.append([
                     cnt,
-                    features[feature_name],
+                    object.get(feature_name),
                     _getAns(path, dataset_for),
             ])
 

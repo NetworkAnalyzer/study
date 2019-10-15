@@ -6,14 +6,11 @@ from skimage.feature import greycomatrix, greycoprops
 
 class Object:
     def __init__(self, image):
-        self.image = image
-        self.glcm = self.__glcm()
+        self.glcm = self.__glcm(image)
 
-    def __glcm(self):
-
-        grey = image.cvt2Gray(self.image)
+    def __glcm(self, image):
+        grey = image.cvt2Gray(image)
         return greycomatrix(grey, [1], [0])
 
     def get(self, feature_name):
-        
         return greycoprops(self.glcm, feature_name)[0][0]
