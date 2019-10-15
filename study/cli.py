@@ -15,8 +15,9 @@ def img():
 
 
 @cli.command("video")
-def vid():
-    video.main()
+@click.option('--save', default='False')
+def vid(save):
+    video.main(save=save)
 
 
 @cli.command("make_dataset")
