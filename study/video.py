@@ -22,7 +22,7 @@ class Video:
         return cv2.VideoCapture(self.path)
 
     def play(self, save, classify, anfises, start_from=0):
-        if classify is True:
+        if classify:
             if anfises is None:
                 print('Error: you need to set anfis object')
                 exit()
@@ -35,8 +35,8 @@ class Video:
 
         classifier = cv2.CascadeClassifier(const.CASCADE_PATH)
 
-        if save is True:
             os.makedirs(image_path(self.file_name), exist_ok=True)
+        if save:
 
         cnt = 1
         rectangle_color = None
@@ -53,7 +53,7 @@ class Video:
                 (x, y) = tuple(object[0:2])
                 (w, h) = tuple(object[2:4])
 
-                if classify is True:
+                if classify:
                     features = Object(x, y, w, h, self.current_gray[y : y + h, x : x + w])
                     # 学習に使用した特徴量を指定する
                     feature = features.contrast
@@ -68,8 +68,8 @@ class Video:
                     elif result == [False, True]:
                         rectangle_color = const.RECT_COLOR_TRUCK
 
-                if save is True:
                     cv2.imwrite(image_path(self.file_name + '/{0}.png'.format(cnt)), self.current_gray[y : y + h, x : x + w])
+                if save:
                     cnt += 1
 
                 if rectangle_color is not None:
@@ -105,5 +105,5 @@ class Video:
 
 def main(save=False, classify=False, anfises=None):
     video = Video(const.VIDEO_PATH)
-    video.play(save=save, classify=classify, anfises=anfises)
+    video.play(save=bool(save), classify=bool(classify), anfises=anfises)
     video.close()
