@@ -21,8 +21,9 @@ def vid():
 
 @cli.command("make_dataset")
 @click.option('--video')
-def dataset(video):
-    make_dataset.main(video)
+@click.option('--feature')
+def dataset(video, feature):
+    make_dataset.main(video, feature)
 
 
 @cli.command("const")
