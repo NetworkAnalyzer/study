@@ -25,7 +25,6 @@ class Anfis:
         print('test data:  ', test_x.shape[0])
         print()
 
-        self.feature_name = dataset_path[dataset_path.find('dataset_')+8:dataset_path.find('_for')]
         self.mfc = mf.MemFuncs(self.generateMf())
         self.anfis = anfis.ANFIS(train_x, train_y, test_x, test_y, self.mfc)
 
@@ -153,7 +152,7 @@ def main(dataset_paths, epochs):
         video.main(
             path=const.get('VIDEO_PATH'),
             classify=True,
-            anfises={'car' : cars[0].anfis, 'truck' : trucks[0].anfis, 'feature' : cars[0].feature_name}
+            anfises={'car' : cars[0].anfis, 'truck' : trucks[0].anfis}
         )
 
     printResult(cars, 'car')

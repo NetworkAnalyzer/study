@@ -102,7 +102,7 @@ class Video:
     def showFrame(self):
         cv2.imshow(self.file_name, self.current_color)
 
-def main(save=False, classify=False, anfises=None):
-    video = Video(const.VIDEO_PATH)
+def main(path=const.get('VIDEO_PATH'), save=False, classify=False, anfises=None):
+    video = Video(path)
     video.play(save=bool(save), classify=bool(classify), anfises=anfises)
     video.close()

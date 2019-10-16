@@ -1,7 +1,7 @@
 import click
 import os
 from . import make_dataset, image, video, const, anfis, logger
-from .util.path import base_path, dataset_path
+from .util.path import base_path, dataset_path, video_path
 
 @click.group("cli")
 @click.option("--log", default="INFO", help="Logging level of the logger.")
