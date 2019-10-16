@@ -139,7 +139,7 @@ def main(dataset_paths, epochs):
     cars = []
     trucks = []
 
-    for i in range(int(const.K)):
+    for i in range(int(const.get('K'))):
         print('car[{0}]────────────────────────'.format(i))
         cars.append(Anfis(dataset_paths['car']))
         cars[i].train(epochs)
@@ -151,6 +151,7 @@ def main(dataset_paths, epochs):
         print('time: {0}s\n'.format(i, trucks[i].anfis.time))
 
         video.main(
+            path=const.get('VIDEO_PATH'),
             classify=True,
             anfises={'car' : cars[0].anfis, 'truck' : trucks[0].anfis, 'feature' : cars[0].feature_name}
         )

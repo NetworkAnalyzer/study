@@ -15,6 +15,6 @@ class Image:
 
 
 def main():
-    original = cv2.imread(const.IMAGE_PATH)
+    original = cv2.imread(const.get('IMAGE_PATH'))
     features = image.glcm(original, degree=0)
     print(features)

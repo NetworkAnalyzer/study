@@ -33,7 +33,7 @@ class Video:
         for _ in range(start_from):
             self.moveToNextFrame()
 
-        classifier = cv2.CascadeClassifier(const.CASCADE_PATH)
+        classifier = cv2.CascadeClassifier(const.get('CASCADE_PATH'))
 
             os.makedirs(image_path(self.file_name), exist_ok=True)
         if save:
@@ -55,7 +55,7 @@ class Video:
 
                 if classify:
                     features = Object(self.current_gray[y : y + h, x : x + w])
-                    feature = features.get(anfises['feature'])
+                    feature = features.get(const.get('FEATURE'))
 
                     result = [
                         twmeggs.predict(anfises['car'], np.array([[feature]]))[0][0] > 0.5,
@@ -63,9 +63,9 @@ class Video:
                     ]
                     
                     if result == [True, False]:
-                        rectangle_color = const.RECT_COLOR_CAR
+                        rectangle_color = const.get('RECT_COLOR_CAR')
                     elif result == [False, True]:
-                        rectangle_color = const.RECT_COLOR_TRUCK
+                        rectangle_color = const.get('RECT_COLOR_TRUCK')
 
                     cv2.imwrite(image_path(self.file_name + '/{0}.png'.format(cnt)), self.current_gray[y : y + h, x : x + w])
                 if save:

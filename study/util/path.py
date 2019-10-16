@@ -13,3 +13,9 @@ def dataset_path(path=''):
 
 def image_path(path=''):
     return os.path.join(BASE_DIR, 'image', path)
+
+def video_path(path=''):
+    return os.path.join(BASE_DIR, 'video', path)
+
+def cascade_path(path=''):
+    return os.path.join(BASE_DIR, 'cascade', path)
