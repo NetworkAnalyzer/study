@@ -127,9 +127,9 @@ def printResult(anfises, name):
         recall += anfis.anfis.recall
 
     print('{0}────────────────────────'.format(name))
-    print('accuracy:  {0}'.format((accuracy / int(const.K))))
-    print('precision: {0}'.format(round(precision / int(const.K), 4)))
-    print('recall:    {0}'.format(round(recall / int(const.K), 4)))
+    print('accuracy:  {0}'.format((accuracy / int(const.get('K')))))
+    print('precision: {0}'.format(round(precision / int(const.get('K')), 4)))
+    print('recall:    {0}'.format(round(recall / int(const.get('K')), 4)))
     print()
 
 
