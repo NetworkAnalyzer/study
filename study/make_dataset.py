@@ -15,6 +15,10 @@ def _getAns(path, dataset_for):
 def main(video_name, feature_name):
 
     paths = glob.glob("image/{0}/*.png".format(video_name))
+    if paths == []:
+        print('images not found')
+        exit()
+
     os.makedirs(dataset_path(video_name), exist_ok=True)
 
     for dataset_for in ['c', 't']:
