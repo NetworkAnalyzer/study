@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import numpy as np
+from study.util.array import mean
 import study.twmeggs.anfis.anfis as anfis
 import study.twmeggs.anfis.membership.membershipfunction as mf
 from study import const
@@ -20,6 +21,11 @@ class Anfis:
         train_y = train_data[:, last]
         test_x = test_data[:, 0:last]
         test_y = test_data[:, last]
+
+        self.mean = [
+            round(mean(train_x)),
+            round(mean(test_x))
+        ]
 
         print('train data: ', train_x.shape[0])
         print('test data:  ', test_x.shape[0])
@@ -53,44 +59,13 @@ class Anfis:
         return np.array(train_data), np.array(test_data)
 
     def generateMf(self):
-        # TODO: 入力する値の数に合わせてMFを生成する
-
-        # for_car
-        # mf = [
-        #     [
-        #         ['gaussmf',{'mean':0.05,'sigma':10.}],
-        #         ['gaussmf',{'mean':0.06,'sigma':7.}]
-        #     ],[
-        #         ['gaussmf',{'mean':1,'sigma':3.}],
-        #         ['gaussmf',{'mean':2,'sigma':10.}],
-        #     ]
-        # ]
-
-        # for_c
-        mf = [
+        return [
+            # TODO: 複数の特徴量を同時に使用する場合にも対応する
             [
-                ['gaussmf', {'mean': 160, 'sigma': 100.0}],
-                ['gaussmf', {'mean': 170, 'sigma': 70.0}],
-            ],
-            [
-                ['gaussmf', {'mean': 10, 'sigma': 3.0}],
-                ['gaussmf', {'mean': 8, 'sigma': 10.0}],
-            ],
-            [
-                ['gaussmf', {'mean': 0.2, 'sigma': 3.0}],
-                ['gaussmf', {'mean': 0.3, 'sigma': 10.0}],
-            ],
-            [
-                ['gaussmf', {'mean': 0.002, 'sigma': 3.0}],
-                ['gaussmf', {'mean': 0.001, 'sigma': 10.0}],
-            ],
-            [
-                ['gaussmf', {'mean': 1, 'sigma': 3.0}],
-                ['gaussmf', {'mean': 0.9, 'sigma': 10.0}],
+                ['gaussmf', {'mean': self.mean[0], 'sigma': 10}], # video3は160
+                ['gaussmf', {'mean': self.mean[1], 'sigma': 7}],  # video3は170
             ],
         ]
-
-        return mf
 
     def train(self, epochs):
         epochs = int(epochs)
