@@ -18,7 +18,7 @@ def img():
 @click.option("--path")
 @click.option('--save', default='False')
 def vid(path, save):
-    const.set('VIDEO_PATH', video_path(video + '.' + const.get('EXT_VIDEO')))
+    const.set('VIDEO_PATH', video_path(path + '.' + const.get('EXT_VIDEO')))
     video.main(path=const.get('VIDEO_PATH'), save=save)
 
 
