@@ -115,12 +115,12 @@ def main(dataset_paths):
 
     for i in range(int(const.get('K'))):
         print('car[{0}]────────────────────────'.format(i))
-        cars.append(Anfis(dataset_paths['car']))
+        cars.append(Anfis(dataset_paths['car'], i=i))
         cars[i].train(const.get('EPOCHS'))
         print('time: {0}s\n'.format(cars[i].anfis.time))
 
         print('truck[{0}]──────────────────────'.format(i))
-        trucks.append(Anfis(dataset_paths['truck']))
+        trucks.append(Anfis(dataset_paths['truck'], i=i))
         trucks[i].train(const.get('EPOCHS'))
         print('time: {0}s\n'.format(trucks[i].anfis.time))
 
