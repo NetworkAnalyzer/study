@@ -1,12 +1,10 @@
 # -*- coding: UTF-8 -*-
 
 import numpy as np
-from study.util.array import mean
 import study.twmeggs.anfis.anfis as anfis
 import study.twmeggs.anfis.membership.membershipfunction as mf
 from study import const
 from study import video
-import csv
 from study.util.array import mean, concat
 from study.exception import InvalidEpochsValueError
 
