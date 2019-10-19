@@ -7,31 +7,31 @@ import study.twmeggs.anfis.membership.membershipfunction as mf
 from study import const
 from study import video
 import csv
-from study.util.array import mean
+from study.util.array import mean, concat
 from study.exception import InvalidEpochsValueError
 
 
 class Anfis:
-    def __init__(self, dataset_path, k=5, i=0):
-        dataset = self.loadDataset(dataset_path)
-        train_data, test_data = self.splitDataset(dataset[:, 1:], k, i)
+    def __init__(self, dataset_paths, k=5, i=0):
+        
+        train_x = []
+        test_x = []
 
-        last = train_data.shape[1] - 1
-        train_x = train_data[:, 0:last]
-        train_y = train_data[:, last]
-        test_x = test_data[:, 0:last]
-        test_y = test_data[:, last]
+        for path in dataset_paths:
+            dataset = self.loadDataset(path)
+            train_data, test_data = self.splitDataset(dataset[:, 1:], k, i)
 
-        self.mean = [
-            round(mean(train_x)),
-            round(mean(test_x))
-        ]
-
+            last = train_data.shape[1] - 1
+            train_x = concat(train_x, train_data[:, 0:last], 1)
+            train_y = train_data[:, last]
+            test_x = concat(test_x, test_data[:, 0:last], 1)
+            test_y = test_data[:, last]
+        
         print('train data: ', train_x.shape[0])
         print('test data:  ', test_x.shape[0])
         print()
 
-        self.mfc = mf.MemFuncs(self.generateMf())
+        self.mfc = mf.MemFuncs(self.generateMf(train_x, test_x))
         self.anfis = anfis.ANFIS(train_x, train_y, test_x, test_y, self.mfc)
 
     def loadDataset(self, path):
@@ -58,14 +58,16 @@ class Anfis:
 
         return np.array(train_data), np.array(test_data)
 
-    def generateMf(self):
-        return [
-            # TODO: 複数の特徴量を同時に使用する場合にも対応する
-            [
-                ['gaussmf', {'mean': self.mean[0], 'sigma': 10}], # video3は160
-                ['gaussmf', {'mean': self.mean[1], 'sigma': 7}],  # video3は170
-            ],
-        ]
+    def generateMf(self, train_x, test_x):
+        mf = []
+
+        for i in range(len(train_x[0])):
+            mf.append([
+                ['gaussmf', {'mean' : mean(train_x[:, i]), 'sigma' : 10}],
+                ['gaussmf', {'mean' : mean(test_x[:, i]),  'sigma' : 7}],
+            ])
+
+        return mf
 
     def train(self, epochs):
         epochs = int(epochs)
