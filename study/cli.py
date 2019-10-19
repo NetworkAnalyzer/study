@@ -48,4 +48,6 @@ def anf(feature, video, epochs):
 
     const.set('VIDEO_PATH', video_path(video) + '.' + const.get('EXT_VIDEO'))
 
-    anfis.main(dataset_paths, epochs)
+    const.set('EPOCHS', epochs)
+
+    anfis.main(dataset_paths)
