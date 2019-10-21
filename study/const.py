@@ -17,6 +17,15 @@ const_list = {
     'RECT_COLOR_TRUCK'   : (0, 0, 255),
     'EXT_VIDEO'          : 'mp4',
     'EXT_IMAGE'          : 'png', 
+
+    'VIDEO_NAME' : {
+        1 : 'video3_truck_2',
+        2 : 'video7_truck_2',
+        3 : 'video3_truck_3',
+        4 : 'video7_truck_1',
+    },
+    
+    'VERBOSE' : False,
 }
 
 def get(key):

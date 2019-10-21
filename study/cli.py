@@ -32,7 +32,7 @@ def dataset(video, feature):
 
 @cli.command("anfis")
 @click.option('--feature', default='glcm')
-@click.option('--video', default='')
+@click.option('--video', default='1')
 @click.option('--epochs', default=const.get('EPOCHS'))
 def anf(feature, video, epochs):
     const.set('FEATURE', feature.split(','))
@@ -42,9 +42,11 @@ def anf(feature, video, epochs):
         'truck' : [],
     }
 
+    video_name = const.get('VIDEO_NAME')[int(video)]
+
     for feature in const.get('FEATURE'):
-        car_path = dataset_path(os.path.join(video, 'dataset_{0}_for_c.csv'.format(feature)))
-        truck_path = dataset_path(os.path.join(video, 'dataset_{0}_for_t.csv'.format(feature)))
+        car_path = dataset_path(os.path.join(video_name, 'dataset_{0}_for_c.csv'.format(feature)))
+        truck_path = dataset_path(os.path.join(video_name, 'dataset_{0}_for_t.csv'.format(feature)))
 
         dataset_paths['car'].append(car_path)
         dataset_paths['truck'].append(truck_path)
@@ -54,7 +56,7 @@ def anf(feature, video, epochs):
         click.echo('use {0}'.format(truck_path))
         click.echo()
 
-    const.set('VIDEO_PATH', video_path(video) + '.' + const.get('EXT_VIDEO'))
+    const.set('VIDEO_PATH', video_path(video_name) + '.' + const.get('EXT_VIDEO'))
 
     const.set('EPOCHS', epochs)
 
