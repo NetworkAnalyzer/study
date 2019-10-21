@@ -9,6 +9,7 @@ import numpy as np
 from .membership import mfDerivs
 import copy
 import time
+from study import const
 
 
 class ANFIS:
@@ -124,10 +125,13 @@ class ANFIS:
 
             # error
             error = np.mean((self.trainY - layerFive.T) ** 2)
-            if epoch > 1:
-                print(str(epoch) + ' error: ' + str(error) + ' ({0})'.format(error - self.errors[-1]))
-            else:
-                print(str(epoch) + ' error: ' + str(error))
+
+            if const.get('VERBOSE'):
+                if epoch > 1:
+                    diff = error - self.errors[-1]
+                    print('{epoch} error: {error} ({diff})'.format(epoch=epoch, error=error, diff=diff))
+                else:
+                    print('{epoch} error: {error}'.format(epoch=epoch, error=error))
 
             self.errors = np.append(self.errors, error)
             if error < self.min_error:

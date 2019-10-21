@@ -25,9 +25,10 @@ class Anfis:
             test_x = concat(test_x, test_data[:, 0:last], 1)
             test_y = test_data[:, last]
         
-        print('train data: ', train_x.shape[0])
-        print('test data:  ', test_x.shape[0])
-        print()
+        if const.get('VERBOSE'):
+            print('train data: ', train_x.shape[0])
+            print('test data:  ', test_x.shape[0])
+            print()
 
         self.mfc = mf.MemFuncs(self.generateMf(train_x, test_x))
         self.anfis = anfis.ANFIS(train_x, train_y, test_x, test_y, self.mfc)
@@ -89,23 +90,37 @@ class Anfis:
     def getMinError(self):
         return self.anfis.min_error
 
+def printTime(time):
+    print('time: {0}s\n'.format(time))
+
 
 def printResult(anfises, name):
     
-    accuracy = 0
-    precision = 0
-    recall = 0
+    sum = {
+        'accuracy'  : 0,
+        'precision' : 0,
+        'recall'    : 0,
+    }
 
     for anfis in anfises:
-        accuracy += anfis.anfis.accuracy
-        precision += anfis.anfis.precision
-        recall += anfis.anfis.recall
+        sum['accuracy']  += anfis.anfis.accuracy
+        sum['precision'] += anfis.anfis.precision
+        sum['recall']    += anfis.anfis.recall
 
-    print('{0}────────────────────────'.format(name))
-    print('accuracy:  {0}'.format((accuracy / int(const.get('K')))))
-    print('precision: {0}'.format(round(precision / int(const.get('K')), 4)))
-    print('recall:    {0}'.format(round(recall / int(const.get('K')), 4)))
-    print()
+    k = const.get('K')
+    accuracy  = round(sum['accuracy'] / k, 4)
+    precision = round(sum['precision'] / k, 4)
+    recall    = round(sum['recall'] / k, 4)
+
+    if const.get('VERBOSE'):
+        print('{0}───────────────────────────────────'.format(name))
+        print('accuracy','precision','recall', sep="\t")
+        print( accuracy,  precision,  recall,  sep="\t\t")
+        print()
+    else:
+        print(const.get('FEATURE'))
+        print(const.get('VIDEO_PATH'))
+        print(accuracy)
 
 
 def main(dataset_paths):
@@ -114,11 +129,10 @@ def main(dataset_paths):
     trucks = []
 
     for i in range(int(const.get('K'))):
-        print('car[{0}]────────────────────────'.format(i))
+        if const.get('VERBOSE'):
+            print('car[{0}]────────────────────────'.format(i))
         cars.append(Anfis(dataset_paths['car'], i=i))
         cars[i].train(const.get('EPOCHS'))
-        print('time: {0}s\n'.format(cars[i].anfis.time))
-
         print('truck[{0}]──────────────────────'.format(i))
         trucks.append(Anfis(dataset_paths['truck'], i=i))
         trucks[i].train(const.get('EPOCHS'))
@@ -129,6 +143,9 @@ def main(dataset_paths):
             classify=True,
             anfises={'car' : cars[0].anfis, 'truck' : trucks[0].anfis}
         )
+        if const.get('VERBOSE'):
+            printTime(cars[i].anfis.time)
+
 
     printResult(cars, 'car')
     printResult(trucks, 'truck')
