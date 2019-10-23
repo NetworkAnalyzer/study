@@ -35,8 +35,8 @@ class Video:
 
         classifier = cv2.CascadeClassifier(const.get('CASCADE_PATH'))
 
-            os.makedirs(image_path(self.file_name), exist_ok=True)
         if save:
+            os.makedirs(image_path(self.file_name), exist_ok=True)
 
         cnt = 1
         rectangle_color = None
