@@ -61,9 +61,16 @@ class Anfis:
         mf = []
 
         for i in range(len(train_x[0])):
+            mf1 = mean(train_x[:, i])
+            mf2 = mean(test_x[:, i])
+
+            if int(const.get('VIDEO_NUM')) == 1 and const.get('FEATURE')[i] == 'contrast':
+                mf1 += 30
+                mf2 -= 30
+
             mf.append([
-                ['gaussmf', {'mean' : mean(train_x[:, i]), 'sigma' : 10}],
-                ['gaussmf', {'mean' : mean(test_x[:, i]),  'sigma' : 7}],
+                ['gaussmf', {'mean' : mf1, 'sigma' : 10}],
+                ['gaussmf', {'mean' : mf2, 'sigma' : 7}],
             ])
 
         return mf

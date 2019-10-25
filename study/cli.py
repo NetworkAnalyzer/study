@@ -58,6 +58,7 @@ def anf(feature, video, epochs, verbose):
             click.echo('use {0}'.format(truck_path))
             click.echo()
 
+    const.set('VIDEO_NUM', video)
     const.set('VIDEO_PATH', video_path(video_name) + '.' + const.get('EXT_VIDEO'))
 
     const.set('EPOCHS', epochs)
