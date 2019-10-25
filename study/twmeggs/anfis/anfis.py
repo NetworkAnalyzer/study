@@ -178,6 +178,7 @@ class ANFIS:
                         self.memFuncs[i][MFs][1][paramList[param]] += dAlpha[i][MFs][param]
 
             epoch += 1
+            self.plotErrors(pause=True)
 
         self.fittedValues = predict(self, self.testX)
 
@@ -187,16 +188,17 @@ class ANFIS:
 
         self.isTrained = True
 
-    def plotErrors(self):
-        if self.isTrained:
-            import matplotlib.pyplot as plt
+    def plotErrors(self, pause=False):
+        import matplotlib.pyplot as plt
 
-            plt.plot(list(range(len(self.errors))), self.errors, 'o', label='errors')
-            plt.ylabel('error')
-            plt.xlabel('epoch')
-            plt.show()
+        plt.plot(list(range(len(self.errors))), self.errors, 'o', label='errors')
+        plt.ylabel('error')
+        plt.xlabel('epoch')
+
+        if pause:
+            plt.pause(.01)
         else:
-            print('ANFIS is not trained yet.')
+            plt.show()
 
     def plotMF(self, x, inputNumber):
         """plotMF(self, x, inputNumber)
