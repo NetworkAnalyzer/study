@@ -19,6 +19,7 @@ const_list = {
     'EXT_IMAGE'          : 'png', 
 
     'VIDEO_NAME' : {
+        0 : '',                 # integrated
         1 : 'video3_truck_2',
         2 : 'video7_truck_2',
         3 : 'video3_truck_3',
