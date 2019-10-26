@@ -41,6 +41,11 @@ def inte():
 @click.option('--epochs', default=const.get('EPOCHS'))
 @click.option('--verbose', is_flag=True)
 def anf(feature, video, epochs, verbose):
+    for f in feature.split(','):
+        if f not in ['contrast', 'dissimilarity', 'homogeneity', 'asm', 'correlation']:
+            print('Invalid feature name "{0}"'.format(f))
+            exit()
+    
     const.set('FEATURE', feature.split(','))
 
     dataset_paths = {
