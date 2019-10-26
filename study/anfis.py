@@ -140,18 +140,15 @@ def main(dataset_paths):
             print('car[{0}]────────────────────────'.format(i))
         cars.append(Anfis(dataset_paths['car'], i=i))
         cars[i].train(const.get('EPOCHS'))
-        print('truck[{0}]──────────────────────'.format(i))
-        trucks.append(Anfis(dataset_paths['truck'], i=i))
-        trucks[i].train(const.get('EPOCHS'))
-        print('time: {0}s\n'.format(trucks[i].anfis.time))
-
-        video.main(
-            path=const.get('VIDEO_PATH'),
-            classify=True,
-            anfises={'car' : cars[0].anfis, 'truck' : trucks[0].anfis}
-        )
         if const.get('VERBOSE'):
             printTime(cars[i].anfis.time)
+
+        if const.get('VERBOSE'):
+            print('truck[{0}]──────────────────────'.format(i))
+        trucks.append(Anfis(dataset_paths['truck'], i=i))
+        trucks[i].train(const.get('EPOCHS'))
+        if const.get('VERBOSE'):
+            printTime(trucks[i].anfis.time)
 
 
     printResult(cars, 'car')
