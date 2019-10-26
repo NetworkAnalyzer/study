@@ -1,6 +1,6 @@
 import click
 import os
-from . import make_dataset, image, video, const, anfis, logger
+from . import make_dataset, integrate_dataset, image, video, const, anfis, logger
 from .util.path import base_path, dataset_path, video_path
 
 @click.group("cli")
@@ -28,6 +28,11 @@ def vid(path, save):
 def dataset(video, feature):
     const.set('FEATURE', feature)
     make_dataset.main(video, feature)
+
+
+@cli.command("integrate_dataset")
+def inte():
+    integrate_dataset.main()
 
 
 @cli.command("anfis")
