@@ -139,3 +139,5 @@ dmypy.json
 *.mpeg
 *.avi
 *.zip
+accuracy
+commands
