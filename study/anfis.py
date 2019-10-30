@@ -101,6 +101,9 @@ def printTime(time):
     print('time: {0}s\n'.format(time))
 
 
+def calcF_measure(precision, recall):
+    return round((2 * precision * recall) / (precision + recall), 4)
+    
 def printResult(anfises, name):
     
     sum = {
@@ -118,16 +121,18 @@ def printResult(anfises, name):
     accuracy  = round(sum['accuracy'] / k, 4)
     precision = round(sum['precision'] / k, 4)
     recall    = round(sum['recall'] / k, 4)
+    f_measure = calcF_measure(precision, recall)
 
     if const.get('VERBOSE'):
         print('{0}───────────────────────────────────'.format(name))
-        print('accuracy','precision','recall', sep="\t")
-        print( accuracy,  precision,  recall,  sep="\t\t")
+        print('accuracy','precision','recall', 'f_measure', sep="\t")
+        print( accuracy,  precision,  recall, f_measure, sep="\t\t")
         print()
     else:
-        print(const.get('FEATURE'))
-        print(const.get('VIDEO_PATH'))
-        print(accuracy)
+        print(','.join(const.get('FEATURE')))
+        print(const.get('VIDEO_NAME')[int(const.get('VIDEO_NUM'))])
+        print(name)
+        print(accuracy, f_measure, sep=',')
 
 
 def main(dataset_paths):
