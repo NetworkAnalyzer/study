@@ -2,7 +2,7 @@
 
 rm commands
 
-bash permutation_combination.sh 5 4 c | while read line
+bash permutation_combination.sh 5 1 c | while read line
 do
   line=${line/1/contrast}
   line=${line/2/dissimilarity}
