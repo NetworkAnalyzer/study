@@ -40,7 +40,8 @@ def inte():
 @click.option('--video', default='1')
 @click.option('--epochs', default=const.get('EPOCHS'))
 @click.option('--verbose', is_flag=True)
-def anf(feature, video, epochs, verbose):
+@click.option('--pickle')
+def anf(feature, video, epochs, verbose, pickle):
     for f in feature.split(','):
         if f not in ['contrast', 'dissimilarity', 'homogeneity', 'asm', 'correlation']:
             print('Invalid feature name "{0}"'.format(f))
@@ -75,5 +76,10 @@ def anf(feature, video, epochs, verbose):
 
     if verbose:
         const.set('VERBOSE', True)
+    
+    if pickle == 'dump':
+        const.set('PICKLE_DUMP', True)
+    if pickle == 'load':
+        const.set('PICKLE_LOAD', True)
 
     anfis.main(dataset_paths)

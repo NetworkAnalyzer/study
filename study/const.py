@@ -27,6 +27,8 @@ const_list = {
     },
     
     'VERBOSE' : False,
+    'PICKLE_DUMP': False,
+    'PICKLE_LOAD': False,
 }
 
 def get(key):

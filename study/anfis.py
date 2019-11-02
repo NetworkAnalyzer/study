@@ -1,10 +1,12 @@
 # -*- coding: UTF-8 -*-
 
 import numpy as np
+import pandas as pd
 import study.twmeggs.anfis.anfis as anfis
 import study.twmeggs.anfis.membership.membershipfunction as mf
 from study import const
 from study import video
+from study.util.path import exists
 from study.util.array import mean, concat
 from study.exception import InvalidEpochsValueError
 
@@ -123,26 +125,67 @@ def printResult(anfis, name):
         print(accuracy, f_measure, sep=',')
 
 
+def pickleDump(anfis, type):
+    path = "{video}_{features}_{epochs}_{k}_{type}.pkl".format(
+            video=const.get('VIDEO_NUM'),
+            features=','.join(const.get('FEATURE')),
+            epochs=const.get('EPOCHS'),
+            k=const.get('K'),
+            type=type
+        )
+
+    pd.to_pickle(anfis, path)
+    print("ANFIS for {0} is pickled at {1}".format(type, path))
+
+
+def pickleLoad(type):
+    path = "{video}_{features}_{epochs}_{k}_{type}.pkl".format(
+            video=const.get('VIDEO_NUM'),
+            features=','.join(const.get('FEATURE')),
+            epochs=const.get('EPOCHS'),
+            k=const.get('K'),
+            type=type
+        )
+
+    if not exists(path):
+        print('{path} not found'.format(path=path))
+        exit()
+
+    return pd.read_pickle(path)
+
+
 def main(dataset_paths):
 
-    cars = []
-    trucks = []
-
     for i in range(int(const.get('K'))):
-        if const.get('VERBOSE'):
-            print('car[{0}]────────────────────────'.format(i))
-        cars.append(Anfis(dataset_paths['car'], i=i))
-        cars[i].train(const.get('EPOCHS'))
-        if const.get('VERBOSE'):
-            printTime(cars[i].anfis.time)
+        if const.get('PICKLE_LOAD'):
+            car = pickleLoad('car')
+        else:
+            if const.get('VERBOSE'):
+                print('car────────────────────────')
+            car = Anfis(dataset_paths['car'], i=i)
+            car.train(const.get('EPOCHS'))
+            if const.get('VERBOSE'):
+                printTime(car.anfis.time)
 
-        if const.get('VERBOSE'):
-            print('truck[{0}]──────────────────────'.format(i))
-        trucks.append(Anfis(dataset_paths['truck'], i=i))
-        trucks[i].train(const.get('EPOCHS'))
-        if const.get('VERBOSE'):
-            printTime(trucks[i].anfis.time)
+        if const.get('PICKLE_LOAD'):
+            truck = pickleLoad('truck')
+        else:
+            if const.get('VERBOSE'):
+                print('truck──────────────────────')
+            truck = Anfis(dataset_paths['truck'], i=i)
+            truck.train(const.get('EPOCHS'))
+            if const.get('VERBOSE'):
+                printTime(truck.anfis.time)
 
+        video.main(
+            path=const.get('VIDEO_PATH'),
+            classify=True,
+            anfises={'car' : car.anfis, 'truck' : truck.anfis}
+        )
 
-    printResult(cars, 'car')
-    printResult(trucks, 'truck')
+    printResult(car, 'car')
+    printResult(truck, 'truck')
+
+    if const.get('PICKLE_DUMP'):
+        pickleDump(car, 'car')
+        pickleDump(truck, 'truck')

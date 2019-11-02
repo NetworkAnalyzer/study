@@ -19,3 +19,6 @@ def video_path(path=''):
 
 def cascade_path(path=''):
     return os.path.join(BASE_DIR, 'cascade', path)
+
+def exists(path):
+    return os.path.exists(path)
