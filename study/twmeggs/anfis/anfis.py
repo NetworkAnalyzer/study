@@ -178,7 +178,6 @@ class ANFIS:
                         self.memFuncs[i][MFs][1][paramList[param]] += dAlpha[i][MFs][param]
 
             epoch += 1
-            self.plotErrors(pause=True)
 
         self.fittedValues = predict(self, self.testX)
 
