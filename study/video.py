@@ -54,12 +54,12 @@ class Video:
                 (w, h) = tuple(object[2:4])
 
                 if classify:
-                    features = Object(self.current_gray[y : y + h, x : x + w])
-                    feature = features.get(const.get('FEATURE'))
+                    glcm = Object(self.current_gray[y : y + h, x : x + w])
+                    features = glcm.get(const.get('FEATURE'))
 
                     result = [
-                        twmeggs.predict(anfises['car'], np.array([[feature]]))[0][0] > 0.5,
-                        twmeggs.predict(anfises['truck'], np.array([[feature]]))[0][0] > 0.5,
+                        twmeggs.predict(anfises['car'], np.array([features]))[0][0] > 0.5,
+                        twmeggs.predict(anfises['truck'], np.array([features]))[0][0] > 0.5,
                     ]
                     
                     if result == [True, False]:

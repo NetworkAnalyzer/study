@@ -12,5 +12,5 @@ class Object:
         grey = util_image.cvt2Gray(image)
         return greycomatrix(grey, [1], [0])
 
-    def get(self, feature_name):
-        return greycoprops(self.glcm, feature_name)[0][0]
+    def get(self, features):
+        return [greycoprops(self.glcm, feature)[0][0] for feature in features]
