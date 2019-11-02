@@ -104,28 +104,16 @@ def printTime(time):
 def calcF_measure(precision, recall):
     return round((2 * precision * recall) / (precision + recall), 4)
     
-def printResult(anfises, name):
+def printResult(anfis, name):
     
-    sum = {
-        'accuracy'  : 0,
-        'precision' : 0,
-        'recall'    : 0,
-    }
-
-    for anfis in anfises:
-        sum['accuracy']  += anfis.anfis.accuracy
-        sum['precision'] += anfis.anfis.precision
-        sum['recall']    += anfis.anfis.recall
-
-    k = const.get('K')
-    accuracy  = round(sum['accuracy'] / k, 4)
-    precision = round(sum['precision'] / k, 4)
-    recall    = round(sum['recall'] / k, 4)
+    accuracy  = round(anfis.anfis.accuracy, 4)
+    precision = round(anfis.anfis.precision, 4)
+    recall    = round(anfis.anfis.recall, 4)
     f_measure = calcF_measure(precision, recall)
 
     if const.get('VERBOSE'):
         print('{0}───────────────────────────────────'.format(name))
-        print('accuracy','precision','recall', 'f_measure', sep="\t")
+        print('accuracy','precision','recall', '\tf_measure', sep="\t")
         print( accuracy,  precision,  recall, f_measure, sep="\t\t")
         print()
     else:
