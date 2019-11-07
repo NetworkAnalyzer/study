@@ -177,15 +177,15 @@ def main(dataset_paths):
             if const.get('VERBOSE'):
                 printTime(truck.anfis.time)
 
-        video.main(
-            path=const.get('VIDEO_PATH'),
-            classify=True,
-            anfises={'car' : car.anfis, 'truck' : truck.anfis}
-        )
-
     printResult(car, 'car')
     printResult(truck, 'truck')
 
     if const.get('PICKLE_DUMP'):
         pickleDump(car, 'car')
         pickleDump(truck, 'truck')
+
+    # video.main(
+    #     path=const.get('VIDEO_PATH'),
+    #     classify=True,
+    #     anfises={'car' : car.anfis, 'truck' : truck.anfis}
+    # )
