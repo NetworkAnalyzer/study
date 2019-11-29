@@ -27,11 +27,17 @@ class Object:
         ret = []
 
         for feature in features:
-            if feature === 'compactness':
+            if feature == 'compactness':
                 ret.append(self.compactness)
-            else if feature === 'hwr':
+            elif feature == 'hwr' or feature == 'HWR':
                 ret.append(self.hwr)
             else:
-                ret.append(greycoprops(self.glcm, feature)[0][0])
+                ret.append(self.greycoprops_wrap(self.glcm, feature))
         
         return ret
+
+    def greycoprops_wrap(self, glcm, feature):
+        if feature == 'asm':
+            feature = 'ASM'
+        
+        return greycoprops(glcm, feature)[0][0]
